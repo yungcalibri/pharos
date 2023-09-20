@@ -1,21 +1,22 @@
-/+  dbug, default-agent
+/-  *pharos
+/+  dbug, default-agent, schooner
 |%
 +$  card  card:agent:gall
 +$  versioned-state
   $%  state-0
   ==
-+$  state-0  ~
-  :: $:  next-ticket-id=@ud
-  ::     next-comment-id=@ud
-  ::     next-label-id=@ud
-  ::     boards=(map desk:clay board)
-  ::     labels=(set label)
-  :: ==
++$  state-0
+  $:  %0
+      next-ticket-id=@ud
+      next-comment-id=@ud
+      next-label-id=@ud
+      boards=(map desk board)
+      labels=(set label)
+  ==
 --
 =|  state-0
 =*  state  -
 %-  agent:dbug
-%+  verb  &
 ^-  agent:gall
 =<
   |_  =bowl:gall
@@ -37,7 +38,7 @@
   ++  on-load
     |=  old=vase
     ^-  (quip card _this)
-    =/  old  !<(versioned-state old-state)
+    =/  old  !<(versioned-state old)
     ?-  -.old
       %0  [~ this(state old)]
     ==
@@ -48,13 +49,20 @@
     ?+    mark  (on-poke:def mark vase)
       ::
         %handle-http-request
-        ?>  =(src.bowl our.bowl)
-        =/  req  !<([eyre-id=@ta =inbound-request:eyre] vase)
-        =*  dump
-          :_  state
-          (response:schooner eyre-id.req 404 ~ [%none ~])
-        ::
-        dump
+      ?>  =(src.bowl our.bowl)
+      =/  req  !<([eyre-id=@ta =inbound-request:eyre] vase)
+      =*  dump
+        :_  state
+        (response:schooner eyre-id.req 404 ~ [%none ~])
+      ::
+      dump
+      ::
+        %pharos-action
+      ?>  =(src.bowl our.bowl)
+      =/  act  !<(pharos-action vase)
+      =^  cards  state
+        (handle-action:hc act)
+      [cards this]
     ==
   ::
   ++  on-peek  on-peek:def
@@ -78,5 +86,51 @@
   |_  =bowl:gall
   ::
   ++  do-nothing  ~
+  ::
+  ++  handle-action
+    |=  act=pharos-action
+    ^-  (quip card _state)
+    ?-    -.act
+      ::
+        %create-board
+      =/  bod=board         *board
+      =.  desk.bod          desk.act
+      =.  date-created.bod  now.bowl
+      =.  date-updated.bod  now.bowl
+      =.  boards            (~(put by boards) desk.act bod)
+      [~ state]
+      ::
+        %create-ticket
+      ::  derive any fields we don't have
+      ::  put it into the appropriate board
+      ::  use & increment next-ticket-id
+      =/  author=@p          ?.(anon.act src.bowl ~zod)
+      =/  add-to             (~(got by boards) desk.act)
+      =/  new-ticket=ticket  :*  id=next-ticket-id
+                                 title=title.act
+                                 body=body.act
+                                 author=author
+                                 ticket-type=ticket-type.act
+                                 app-version=app-version.act
+                                 ::  defaults only for now
+                                 date-created=now.bowl
+                                 date-updated=now.bowl
+                                 priority=%none
+                                 labels=~
+                                 date-resolved=~
+                                 comments=~
+                             ==
+      =.  next-ticket-id    +(next-ticket-id)
+      =.  tickets.add-to
+        (~(put by tickets.add-to) id.new-ticket new-ticket)
+      =.  boards            (~(put by boards) desk.act add-to)
+      [~ state]
+      ::
+        %delete-ticket
+      =/  bod=board    (~(got by boards) desk.act)
+      =.  tickets.bod  (~(del by tickets.bod) id.act)
+      =.  boards       (~(put by boards) desk.act bod)
+      [~ state]
+    ==
   --
 --
