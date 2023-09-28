@@ -29,6 +29,7 @@
       author=@p
       =ticket-type
       =app-version
+      board=@tas
       date-created=@da
       date-updated=@da
     ::  RFU
@@ -88,7 +89,7 @@
           =desk
       ==
       $:  %create-ticket
-          =desk
+          board=desk
           title=@t
           body=@t
           author=@p

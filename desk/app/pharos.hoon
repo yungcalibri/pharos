@@ -10,7 +10,9 @@
       next-ticket-id=@ud
       next-comment-id=@ud
       next-label-id=@ud
+::  get rid of boards ? 
       boards=(map desk board)
+      tickets=(map @ud ticket)
       labels=(set label)
   ==
 --
@@ -45,6 +47,7 @@
   ::
   ++  on-poke
     |=  [=mark =vase]
+    ~&  mark
     ^-  (quip card _this)
     ?+    mark  (on-poke:def mark vase)
       ::
@@ -52,8 +55,9 @@
       ?>  =(src.bowl our.bowl)
       =/  req  !<([eyre-id=@ta =inbound-request:eyre] vase)
       =*  dump
-        :_  state
-        (response:schooner eyre-id.req 404 ~ [%none ~])
+        `state
+        :::_  state
+        ::(response:schooner eyre-id.req 404 ~ [%none ~])
       ::
       dump
       ::
@@ -101,17 +105,22 @@
       [~ state]
       ::
         %create-ticket
+      ::
+      ::If we using boards add logic to create-board in here if doesn't have in state yet
+      ::
       ::  derive any fields we don't have
       ::  put it into the appropriate board
       ::  use & increment next-ticket-id
-      =/  author=@p          ?.(anon.act src.bowl ~zod)
-      =/  add-to             (~(got by boards) desk.act)
+      ~&  ['action in pharos' act]
+      =/  author=@p         ?.(anon.act src.bowl ~zod)
+      ::=/  add-to             (~(got by boards) desk.act)
       =/  new-ticket=ticket  :*  id=next-ticket-id
                                  title=title.act
                                  body=body.act
                                  author=author
                                  ticket-type=ticket-type.act
                                  app-version=app-version.act
+                                 board=board.act
                                  ::  defaults only for now
                                  date-created=now.bowl
                                  date-updated=now.bowl
@@ -120,11 +129,14 @@
                                  date-resolved=~
                                  comments=~
                              ==
-      =.  next-ticket-id    +(next-ticket-id)
-      =.  tickets.add-to
-        (~(put by tickets.add-to) id.new-ticket new-ticket)
-      =.  boards            (~(put by boards) desk.act add-to)
-      [~ state]
+      ~&  next-ticket-id
+      ::=.  next-ticket-id    +(next-ticket-id)
+      ~&  new-ticket
+      ::=.  tickets           (~(put by tickets) next-ticket-id new-ticket)
+      ::=.  tickets.add-to
+      ::  (~(put by tickets.add-to) id.new-ticket new-ticket)
+      ::=.  boards            (~(put by boards) desk.act add-to)
+      `state(tickets (~(put by tickets) next-ticket-id new-ticket), next-ticket-id +(next-ticket-id))
       ::
         %delete-ticket
       =/  bod=board    (~(got by boards) desk.act)
