@@ -1,5 +1,5 @@
 /-  *pharos
-/+  dbug, default-agent, schooner
+/+  dbug, default-agent, schooner, server, view=pharos-view
 |%
 +$  card  card:agent:gall
 +$  versioned-state
@@ -55,11 +55,18 @@
       ?>  =(src.bowl our.bowl)
       =/  req  !<([eyre-id=@ta =inbound-request:eyre] vase)
       =*  dump
-        `state
-        :::_  state
-        ::(response:schooner eyre-id.req 404 ~ [%none ~])
+        :_  state
+        (response:schooner eyre-id.req 404 ~ [%none ~])
       ::
-      dump
+      =^  cards  state
+        ^-  (quip card _state)
+        ?+    method.request.inbound-request.req  dump
+          ::
+            %'GET'
+          ~(get handle-http:hc req)
+        ==
+        ::
+      [cards this]
       ::
         %pharos-action
       ?>  =(src.bowl our.bowl)
@@ -144,5 +151,24 @@
       =.  boards       (~(put by boards) desk.act bod)
       [~ state]
     ==
+  ::
+  ++  handle-http
+    |_  [eyre-id=@ta =inbound-request:eyre]
+    +*  req   (parse-request-line:server url.request.inbound-request)
+        body  body.request.inbound-request
+        send  (cury response:schooner eyre-id)
+        dump  [(send [404 ~ [%none ~]]) state]
+        derp  [(send [500 ~ [%stock ~]]) state]
+    ::
+    ++  get
+      ^-  (quip card _state)
+      =/  site  site.req
+      ?+    site  dump
+        ::
+          [%apps %pharos ~]
+        :_  state
+        (send [200 ~ [%manx ~(home view state)]])
+      ==
+    --
   --
 --
