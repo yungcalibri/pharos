@@ -9,6 +9,11 @@
     ;head
       ;title: Pharos
       ;meta(charset "utf-8");
+      ;link
+        =rel          "stylesheet"
+        =crossorigin  "anonymous"
+        =integrity    "sha384-fXCv1dA3EJQwVgsQOvtqiHwOEUBDruR4MiLNatn8wzSPvKLN0N/Pt5TTrpvD/jRf"
+        =href         "https://unpkg.com/@yungcalibri/layout@0.1.5/dist/bundle.css";
       ;script
         =crossorigin  "anonymous"
         =integrity    "sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls"
@@ -26,6 +31,16 @@
         =crossorigin  "anonymous"
         =integrity    "sha384-SWTvl6gg9wW7CzNqGD9/s3vxwaaKN2g8/eYyu0yT+rkQ/Rb/6NmjnbTi9lYNrpZ1"
         =src          "https://unpkg.com/hyperscript.org@0.9.11";
+      ;script
+        =type         "module"
+        =crossorigin  "anonymous"
+        =integrity    "sha384-c4SSI79zksulLspZ11E4zHda7VSN8U2rGzjdomNMNrgCA/S93oOe2yqQToNh1tLY"
+        =src          "https://unpkg.com/@yungcalibri/layout@0.1.5/umd/bundle.js";
+      ;script
+        =nomodule     ""
+        =crossorigin  "anonymous"
+        =integrity    "sha384-39Mph3QgxUJ4Ou1dsJkb8LY0baiOtTwuW7LYX/pqchlr1glQOp1X8LL1LAkTlv5N"
+        =src          "https://unpkg.com/@yungcalibri/layout@0.1.5/dist/bundle.js";
       ;style: {style}
     ==
     ;body(hx-boost "true", hx-ext "json-enc,include-vals")
@@ -70,10 +85,22 @@
   '''
   :root {
     --measure: 70ch;
+    --pc-aquamarine: #0C7489;
+    --pc-seagreen:   #78C6CE;
+    --pc-yellow:     #EFCA08;
+    --pc-orange:     #F18F01;
+    --pc-white:      #FFF;
   }
   h1, h2, h3, h4, h5, h6 {
     margin-top: unset;
     margin-bottom: unset;
+  }
+  #topnav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--pc-aquamarine);
+    color: var(--pc-white);
   }
   header {
     padding-block: 1ch;
