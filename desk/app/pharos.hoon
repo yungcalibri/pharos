@@ -168,6 +168,14 @@
           [%apps %pharos ~]
         :_  state
         (send [200 ~ [%manx ~(home view state)]])
+        ::
+          [%apps %pharos %ticket @t ~]
+        =/  ticket-id  (slav %ud i.t.t.t.site)
+        =/  got  (~(get by tickets) ticket-id)
+        ?~  got
+          ~|("No ticket with id {<ticket-id>}" dump)
+        :_  state
+        (send [200 ~ [%manx (~(ticket-page view state) u.got)]])
       ==
     --
   --

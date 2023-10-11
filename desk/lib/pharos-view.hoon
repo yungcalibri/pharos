@@ -56,26 +56,75 @@
     (gth date-created.a date-created.b)
   %-  page
   ;div
-    ;h1: Tickets
+    ;nav#topnav
+      ;h1: Tickets
+    ==
     ;*  %+  turn  ordered-tickets
     |=  [id=@ud =ticket]
-    ;div.ticket(data-ticket-id (scow %ud id.ticket))
+    ;div.ticket(data-ticket-id (scow %ud id))
       ;header
-        ;h2: {(trip title.ticket)}
+        ;h2
+          ;a/"/apps/pharos/ticket/{(scow %ud id)}"
+            {(trip title.ticket)}
+          ==
+        ==
         ;div
           ; submitted by:
           ;span.monospace:"{<author.ticket>}"
         ==
         ;div
           ; desk:
-          ;span.monospace:"{<board.ticket>}"
+          ;span.monospace: {<board.ticket>}
+        ==
+        ;p: {(trip body.ticket)}
+        ;footer
+          ;+  (formatted-date.c date-updated.ticket)
+        ==
+        ;div.ticket-id
+          ; id: {(scow %ud id)}
         ==
       ==
-      ;p: {(trip body.ticket)}
-      ;footer
-        ;+  (formatted-date.c date-updated.ticket)
+    ==  ::
+  ==
+::
+::  full ticket detail page
+++  ticket-page
+  |=  =ticket
+  %-  page
+  ^-  manx
+  ;div
+    ;sidebar-l
+      ;h1
+        ; {<title.ticket>}
       ==
-      ;div.ticket-id: id: {(scow %ud id.ticket)}
+      ;span
+        ; id: {<id.ticket>}
+      ==
+    ==
+    ;div.ticket
+      ;div
+        ; submitted by:
+        ;span.monospace
+          ; {<author.ticket>}
+        ==
+      ==
+      ;div
+        ; desk:
+        ;span.monospace: {<board.ticket>}
+      ==
+      ;div.body
+        ; {<body.ticket>}
+      ==
+      ;footer
+        ;div
+          ; updated
+          ;+  (formatted-date.c date-updated.ticket)
+        ==
+        ;div
+          ; created
+          ;+  (formatted-date.c date-created.ticket)
+        ==
+      ==
     ==
   ==
 ::
