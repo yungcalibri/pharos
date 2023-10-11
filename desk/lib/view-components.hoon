@@ -1,6 +1,7 @@
 |%
 ++  formatted-date
-  |=  =date
+  |=  =@da
+  =/  =date  (yore da)
   ^-  manx
   ;div.formatted-date
     ;span: {<h.t.date>}:{<m.t.date>}:{<s.t.date>}

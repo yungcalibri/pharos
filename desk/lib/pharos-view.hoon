@@ -44,7 +44,6 @@
     ;h1: Tickets
     ;*  %+  turn  ordered-tickets
     |=  [id=@ud =ticket]
-    =/  =date  (yore date-updated.ticket)
     ;div.ticket(data-ticket-id (scow %ud id.ticket))
       ;header
         ;h2: {(trip title.ticket)}
@@ -59,7 +58,7 @@
       ==
       ;p: {(trip body.ticket)}
       ;footer
-        ;+  (formatted-date.c date)
+        ;+  (formatted-date.c date-updated.ticket)
       ==
       ;div.ticket-id: id: {(scow %ud id.ticket)}
     ==
