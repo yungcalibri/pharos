@@ -24,6 +24,7 @@
     |=  [[* a=ticket] [* b=ticket]]
     (gth date-created.a date-created.b)
   %-  page
+  ^-  manx
   ;div#home
     ;nav#topnav
       ;h1: Tickets
@@ -32,14 +33,32 @@
     ;center-l#home-main
       ;sidebar-l(side "right", sideWidth "28rem", space "var(--s-4)")
         ::  main content
-        ;div#ticket-list
-          ;*  %+  turn  ordered-tickets
-          |=  [id=@ud =ticket]
-          ;div.ticket(data-ticket-id (scow %ud id))
-            ;h2
-              ;a/"/apps/pharos/ticket/{(scow %ud id)}"
-                {(trip title.ticket)}
-              ==
+        ;table#ticket-list
+          ;thead
+            ;tr
+              ;th: type
+              ;th: issue
+              ;th: from
+              ;th: priority
+              ;th: date created
+            ==
+          ==
+          ;tbody
+            ;*  %+  turn  ordered-tickets
+            |=  [id=@ud =ticket]
+            ^-  manx
+            =/  dex=tape  :: formatted body
+              =+  (trip title.ticket)
+              ?:  (gth 20 (lent -))
+                -
+              "{(swag [0 20] -)}..."
+            =/  dat=date  (yore date-created.ticket)
+            ;tr.ticket(data-ticket-id (scow %ud id))
+              ;td:"{(trip `@t`ticket-type.ticket)}"
+              ;td:"{dex}"
+              ;td:"{<author.ticket>}"
+              ;td:"{(trip `@t`priority.ticket)}"
+              ;td:"{<y.-.dat>} - {<m.dat>} - {<d.t.dat>}"
             ==
           ==
         ==
@@ -134,10 +153,6 @@
   }
   header {
     padding-block: 1ch;
-  }
-  .ticket {
-    border-radius: 1ch;
-    background: lightgrey;
   }
   .monospace {
     font-family: monospace;
