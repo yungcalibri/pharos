@@ -80,31 +80,33 @@
   %-  page
   ^-  manx
   ;article.ticket(data-ticket-id (scow %ud id.ticket))
-    ;header
-      ;h2: {(trip title.ticket)}
-      ;cluster-l.ticket-features
-        ;div
-          ; id: {<id.ticket>}
-        ==
-        ;div.monospace
-          ; {<author.ticket>}
-        ==
-        ;div.monospace
-          ; {<board.ticket>}
+    ;stack-l
+      ;header
+        ;stack-l(space "var(--s-1)")
+          ;h2: {(trip title.ticket)}
+          ;div
+            ; Last updated:
+            ;+  (formatted-date.c date-updated.ticket)
+          ==
+          ;cluster-l.ticket-features
+            ;div.pill
+              ;header: id
+              ;div: {<id.ticket>}
+            ==
+            ;div.pill.monospace
+              ;header: author
+              ;div: {<author.ticket>}
+            ==
+            ;div.pill.monospace
+              ;header: app
+              ;div: {<board.ticket>}
+            ==
+          ==
         ==
       ==
-    ==
-    ;div.body
-      ; {<body.ticket>}
-    ==
-    ;footer
-      ;div
-        ; updated
-        ;+  (formatted-date.c date-updated.ticket)
-      ==
-      ;div
-        ; created
-        ;+  (formatted-date.c date-created.ticket)
+      ;hr;
+      ;div.body
+        ; {(trip body.ticket)}
       ==
     ==
   ==
@@ -139,6 +141,9 @@
   h1, h2, h3, h4, h5, h6 {
     margin-top: unset;
     margin-bottom: unset;
+  }
+  hr {
+    width: 100%;
   }
   thead tr {
     background: var(--pc-seagreen-500);
@@ -191,6 +196,29 @@
   }
   header {
     padding-block: 1ch;
+  }
+  .pill {
+    min-width: var(--s2);
+    overflow: hidden;
+    font-family: monospace;
+    font-size: 90%;
+    text-align: center;
+    background-color: var(--pc-aquamarine-200);
+    color: var(--pc-neut-800);
+    border-radius: var(--s-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .pill > header {
+    width: 100%;
+    font-size: 80%;
+    padding-inline: var(--s-4);
+    background-color: var(--pc-seagreen-200);
+    color: var(--pc-neut-200);
+  }
+  .pill > header + div {
+    padding: var(--s-3);
   }
   .monospace, .formatted-date {
     font-family: monospace;
