@@ -7,6 +7,11 @@
       =crossorigin  "anonymous"
       =integrity    "sha384-fXCv1dA3EJQwVgsQOvtqiHwOEUBDruR4MiLNatn8wzSPvKLN0N/Pt5TTrpvD/jRf"
       =href         "https://unpkg.com/@yungcalibri/layout@0.1.5/dist/bundle.css";
+    ;link
+      =rel          "stylesheet"
+      =crossorigin  "anonymous"
+      =integrity    "sha384-Kh+o8x578oGal2nue9zyjl2GP9iGiZ535uZ3CxB3mZf3DcIjovs4J1joi2p+uK18"
+      =href         "https://unpkg.com/@fontsource/lora@5.0.8/index.css";
     ;script
       =crossorigin  "anonymous"
       =integrity    "sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls"

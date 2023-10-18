@@ -122,10 +122,30 @@
     --pc-yellow:     #EFCA08;
     --pc-orange:     #F18F01;
     --pc-white:      #FFF;
+    --pc-gray:       #EEE;
+  }
+  body {
+    font-family: Lora, serif;
   }
   h1, h2, h3, h4, h5, h6 {
     margin-top: unset;
     margin-bottom: unset;
+  }
+  thead tr {
+    background: var(--pc-seagreen);
+    color: var(--pc-white);
+  }
+  tbody tr {
+    background: var(--pc-gray);
+    border-top: var(--s-4) solid var(--pc-white);
+    border-bottom: var(--s-4) solid var(--pc-white);
+  }
+  th, td {
+    padding-inline: 1ch;
+    padding-block: 1ch;
+  }
+  td {
+    border-inline: none;
   }
   #topnav {
     width: 100%;
