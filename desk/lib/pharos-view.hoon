@@ -82,7 +82,7 @@
   ;article.ticket(data-ticket-id (scow %ud id.ticket))
     ;stack-l
       ;header
-        ;stack-l(space "var(--s-1)")
+        ;stack-l(space "var(--s-2)")
           ;h2: {(trip title.ticket)}
           ;div
             ; Last updated:
@@ -100,6 +100,13 @@
             ;div.pill.monospace
               ;header: app
               ;div: {<board.ticket>}
+            ==
+          ==
+          ;div
+            ;a/"/apps/talk/dm/{<author.ticket>}"
+              =target  "_blank"
+              =rel     "noopener noreferer"
+              ; DM {<author.ticket>} in Talk
             ==
           ==
         ==
