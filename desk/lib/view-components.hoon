@@ -45,9 +45,9 @@
   |=  =@da
   =/  =date  (yore da)
   ^-  manx
-  ;div.formatted-date
-    ;span: {<h.t.date>}:{<m.t.date>}:{<s.t.date>}
+  ;span.formatted-date
+    ;span: {<(mod y.-.date 100)>}.{<m.date>}.{<d.t.date>}
     ;span:"  "
-    ;span: {<m.date>}/{<d.t.date>}/{<(mod y.-.date 100)>}
+    ;span: {<h.t.date>}:{<m.t.date>}:{<s.t.date>}
   ==
 --

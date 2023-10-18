@@ -53,7 +53,9 @@
                 -
               "{(swag [0 20] -)}..."
             =/  dat=date  (yore date-created.ticket)
-            ;tr.ticket(data-ticket-id (scow %ud id))
+            ;tr.ticket
+              =hx-get     "/apps/pharos/ticket/{<id.ticket>}"
+              =hx-target  "#ticket-content"
               ;td:"{(trip `@t`ticket-type.ticket)}"
               ;td:"{dex}"
               ;td:"{<author.ticket>}"
@@ -64,49 +66,45 @@
         ==
         ::  sidebar, content panel
         ;div#ticket-content
-          ; boo
+          ;cover-l(centered "small", minHeight "var(--s4)")
+            ;small: Select a ticket to view details
+          ==
         ==
       ==
     ==
   ==
 ::
-::  full ticket detail page
-++  ticket-page
+::  ticket detail view
+++  ticket-detail
   |=  =ticket
   %-  page
   ^-  manx
-  ;div
-    ;sidebar-l
-      ;h1
-        ; {<title.ticket>}
-      ==
-      ;span
-        ; id: {<id.ticket>}
-      ==
-    ==
-    ;div.ticket
-      ;div
-        ; submitted by:
-        ;span.monospace
+  ;article.ticket(data-ticket-id (scow %ud id.ticket))
+    ;header
+      ;h2: {(trip title.ticket)}
+      ;cluster-l.ticket-features
+        ;div
+          ; id: {<id.ticket>}
+        ==
+        ;div.monospace
           ; {<author.ticket>}
         ==
+        ;div.monospace
+          ; {<board.ticket>}
+        ==
+      ==
+    ==
+    ;div.body
+      ; {<body.ticket>}
+    ==
+    ;footer
+      ;div
+        ; updated
+        ;+  (formatted-date.c date-updated.ticket)
       ==
       ;div
-        ; desk:
-        ;span.monospace: {<board.ticket>}
-      ==
-      ;div.body
-        ; {<body.ticket>}
-      ==
-      ;footer
-        ;div
-          ; updated
-          ;+  (formatted-date.c date-updated.ticket)
-        ==
-        ;div
-          ; created
-          ;+  (formatted-date.c date-created.ticket)
-        ==
+        ; created
+        ;+  (formatted-date.c date-created.ticket)
       ==
     ==
   ==
@@ -117,12 +115,23 @@
   '''
   :root {
     --measure: 70ch;
-    --pc-aquamarine: #0C7489;
-    --pc-seagreen:   #78C6CE;
-    --pc-yellow:     #EFCA08;
-    --pc-orange:     #F18F01;
-    --pc-white:      #FFF;
-    --pc-gray:       #EEE;
+    --pc-aquamarine-800: #0C7489;
+    --pc-aquamarine-500: #4BB3BE;
+    --pc-aquamarine-200: #368C96;
+    --pc-seagreen-800:   #12AFCE;
+    --pc-seagreen-500:   #78C6CE;
+    --pc-seagreen-200:   #08505E;
+    --pc-yellow-800:     #F9D939;
+    --pc-yellow-500:     #EFCA08;
+    --pc-yellow-200:     #B29506;
+    --pc-orange-800:     #FEAD34;
+    --pc-orange-500:     #F18F01;
+    --pc-orange-200:     #B76E01;
+    --pc-neut-800:       #F5F7F3;
+    --pc-neut-700:       #EAEEE7;
+    --pc-neut-600:       #E0E6DB;
+    --pc-neut-500:       #D5DECF;
+    --pc-neut-400:       #CBD5C3;
   }
   body {
     font-family: Lora, serif;
@@ -132,13 +141,13 @@
     margin-bottom: unset;
   }
   thead tr {
-    background: var(--pc-seagreen);
-    color: var(--pc-white);
+    background: var(--pc-seagreen-500);
+    color: var(--pc-neut-800);
   }
   tbody tr {
-    background: var(--pc-gray);
-    border-top: var(--s-4) solid var(--pc-white);
-    border-bottom: var(--s-4) solid var(--pc-white);
+    background: var(--pc-neut-200);
+    border-top: var(--s-4) solid var(--pc-neut-500);
+    border-bottom: var(--s-4) solid var(--pc-neut-500);
   }
   th, td {
     padding-inline: 1ch;
@@ -151,21 +160,30 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    background: var(--pc-seagreen);
-    color: var(--pc-white);
+    background: var(--pc-seagreen-500);
+    color: var(--pc-neut-800);
     padding: var(--s0);
     padding-top: var(--s2);
   }
   #ticket-list {
     border-width: var(--s-4);
     border-style: solid;
-    border-color: var(--pc-aquamarine);
+    border-color: var(--pc-aquamarine-500);
+  }
+  #ticket-list tbody tr {
+    cursor: pointer;
+    transition: 100ms;
+  }
+  #ticket-list tbody tr:hover {
+    background: var(--pc-neut-600);
   }
   #ticket-content {
-    border-block-width: 1lh;
-    border-inline-width: 2ch;
+    border-block-width: 0.5lh;
+    border-inline-width: 1ch;
     border-style: solid;
-    border-color: var(--pc-aquamarine);
+    border-color: var(--pc-aquamarine-500);
+    padding-inline: 1ch;
+    padding-block: 0.5lh;
     min-height: 20rem;
   }
   #home-main, #home-main > sidebar-l {
@@ -174,7 +192,7 @@
   header {
     padding-block: 1ch;
   }
-  .monospace {
+  .monospace, .formatted-date {
     font-family: monospace;
   }
   '''

@@ -175,7 +175,7 @@
         ?~  got
           ~|("No ticket with id {<ticket-id>}" dump)
         :_  state
-        (send [200 ~ [%manx (~(ticket-page view state) u.got)]])
+        (send [200 ~ [%manx (~(ticket-detail view state) u.got)]])
       ==
     --
   --
