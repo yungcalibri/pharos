@@ -1,6 +1,6 @@
 /-  *pharos
 /+  c=view-components
-|_  [%0 * * * boards=(map desk board) tickets=(map @ud ticket) *]
+|_  [%0 * * * boards=(map desk board) tickets=(map @ud ticket) * =github-config]
 ::
 ++  page
   |=  kid=manx
@@ -188,8 +188,55 @@
   ;div#settings
     ;+  nav
     ;center-l
-      ;p: Settings
+      ;stack-l
+        ;h2: Github Issues Export
+        ;p
+          ; Configure the repository and access token used to
+          ; export issues to Github.
+        ==
+        ;form
+          =hx-post  "/apps/pharos/settings/github-config"
+          ;label
+            ;div: Repository Owner
+            ;input
+              =class        "monospace"
+              =type         "text"
+              =required     ""
+              =placeholder  "pharos-team"
+              =name         "owner"
+              =value        (trip owner.github-config);
+          ==
+          ;label
+            ;div: Repository
+            ;input
+              =class        "monospace"
+              =type         "text"
+              =required     ""
+              =placeholder  "pharos"
+              =name         "repo"
+              =value        (trip repo.github-config);
+          ==
+          ;label
+            ;div: Access Token
+            ;input
+              =class        "monospace"
+              =type         "password"
+              =required     ""
+              =pattern      "^gho_[a-zA-Z0-9]\{{(scow %ud 36)}}$"
+              =placeholder  "gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              =name         "token"
+              =value        (trip token.github-config);
+          ==
+          ;button: Submit
+        ==
+      ==
     ==
+  ==
+::
+++  success
+  ^-  manx
+  ;div
+    ;span.success: Success!
   ==
 ::
 ++  style
@@ -226,6 +273,14 @@
   hr {
     width: 100%;
   }
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  form > * + * {
+    margin-block-start: var(--s0);
+  }
   thead tr {
     background: var(--pc-seagreen-500);
     color: var(--pc-neut-800);
@@ -253,6 +308,7 @@
     color: var(--pc-neut-800);
     padding: var(--s0);
     padding-top: var(--s2);
+    margin-bottom: var(--s0);
   }
   #topnav .logotype {
     font-size: 150%;
@@ -319,6 +375,13 @@
   }
   .monospace, .formatted-date {
     font-family: monospace;
+  }
+  .success {
+    border: 1px solid var(--pc-aquamarine-800);
+    border-radius: var(--s-3);
+    color: #00CC00;
+    padding-inline: 1ch;
+    padding-block: 0.5lh;
   }
   '''
 --

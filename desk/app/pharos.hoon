@@ -167,7 +167,7 @@
       =.  status.got  ticket-status.act
       [~ state(tickets (~(put by tickets) id.act got))]
       ::
-        %set-github-credentials
+        %edit-github-config
       ~&  owner+owner.act
       ~&  repo+repo.act
       ~&  token+token.act
@@ -221,10 +221,20 @@
     ++  pot
       ^-  (quip card _state)
       =/  site  site.req
-      =*  body  body.request.inbound-request
-      ?~  body
+      ?~  body.request.inbound-request
         ~|("No request body" derp)
       ?+    site  dump
+          [%apps %pharos %settings %github-config ~]
+        =/  jon=(unit json)  (de:json:html q.u.body.request.inbound-request)
+        ?~  jon  ~|("Could not parse request body to JSON" derp)
+        =/  act=pharos-action  (dejs-github-config u.jon)
+        =/  scat=(unit (quip card _state))
+          (mole |.((handle-action act)))
+        ?~  scat  ~|("Could not apply the updated config" derp)
+        :_  +.u.scat
+        %+  weld
+          -.u.scat
+        (send [200 ~ %manx ~(success view state)])
         ::
           [%apps %pharos %ticket @t %edit %status @t ~]
         =/  ticket-id  (slav %ud i.t.t.t.site)

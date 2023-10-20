@@ -117,7 +117,7 @@
           id=@ud
           =ticket-status
       ==
-      $:  %set-github-credentials
+      $:  %edit-github-config
           owner=@t
           repo=@t
           token=@t
