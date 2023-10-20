@@ -29,12 +29,14 @@
       ==
     ==
     ;cluster-l.logotype(space "var(--s0)")
+      ;span:"·"
       ;span: P
       ;span: H
       ;span: A
       ;span: R
       ;span: O
       ;span: S
+      ;span:"·"
     ==
   ==
 ::
@@ -317,12 +319,33 @@
     padding-inline: var(--s2);
     padding-block: var(--s-5);
     border-color: var(--pc-neut-700);
-    border-style: solid ridge;
+    border-style: solid;
     border-width: var(--s-3) 0;
     color: var(--pc-neut-800);
+    background: var(--pc-seagreen-200);
+    overflow: hidden;
+    position: relative;
   }
-  #topnav .logotype::after, #topnav .logotype::before {
-    content: "·";
+  #topnav .logotype > span {
+    z-index: 2;
+    text-shadow: 0px 1px 2px var(--pc-yellow-200);
+  }
+  #topnav .logotype::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    top: -200%;
+    left: 0;
+    width: 100%;
+    height: 700%;
+    background-blend-mode: soft-light;
+    background-image: radial-gradient(
+      circle at 50% 50%,
+      var(--pc-yellow-800),
+      var(--pc-yellow-800) 50%,
+      transparent 70%
+    );
+    animation: lighthouse 15s ease-in-out infinite;
   }
   #topnav :any-link {
     color: var(--pc-neut-800);
@@ -389,6 +412,26 @@
     color: #00CC00;
     padding-inline: 1ch;
     padding-block: 0.5lh;
+  }
+  @keyframes lighthouse {
+    0%  {
+      transform: translateX(0%) rotateY(0);
+    }
+    25% {
+      transform: translateX(-41%) scaleX(80%) scaleY(55%) rotateY(-60deg);
+      filter: opacity(90%);
+    }
+    50% {
+      transform: translateX(0%) rotateY(0);
+      filter: opacity(100%);
+    }
+    75% {
+      transform: translateX(41%) scaleX(80%) scaleY(55%) rotateY(60deg);
+      filter: opacity(90%);
+    }
+    100% {
+      transform: translateX(0%) rotateY(0);
+    }
   }
   '''
 --
