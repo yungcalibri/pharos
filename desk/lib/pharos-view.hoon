@@ -17,6 +17,12 @@
     ==
   ==
 ::
+++  nav
+  ^-  manx
+  ;nav#topnav
+    ;h1: Tickets
+  ==
+::
 ++  home
   ::  sort by date created
   =/  ordered-tickets=(list [@ud ticket])
@@ -26,9 +32,7 @@
   %-  page
   ^-  manx
   ;div#home
-    ;nav#topnav
-      ;h1: Tickets
-    ==
+    ;+  nav
     ::
     ;center-l#home-main
       ;sidebar-l(side "right", sideWidth "28rem", space "var(--s-4)")
@@ -161,6 +165,14 @@
       =include-vals  "status: 'dropped'"
       ;span.value: dropped
     ==
+  ==
+::
+++  settings
+  ^-  manx
+  %-  page
+  ;div#settings
+    ;+  nav
+    ;p: Settings
   ==
 ::
 ++  style

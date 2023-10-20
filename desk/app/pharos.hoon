@@ -10,10 +10,12 @@
       next-ticket-id=@ud
       next-comment-id=@ud
       next-label-id=@ud
-::  get rid of boards ? 
+    ::  get rid of boards ? 
       boards=(map desk board)
       tickets=(map @ud ticket)
       labels=(set label)
+    ::
+      gh-config=github-config
   ==
 --
 =|  state-0
@@ -164,6 +166,13 @@
       =/  got=ticket  (~(got by tickets) id.act)
       =.  status.got  ticket-status.act
       [~ state(tickets (~(put by tickets) id.act got))]
+      ::
+        %set-github-credentials
+      ~&  owner+owner.act
+      ~&  repo+repo.act
+      ~&  token+token.act
+      =/  new-config=github-config  +.act
+      [~ state(gh-config new-config)]
     ==
   ::
   ++  handle-http
@@ -182,6 +191,10 @@
           [%apps %pharos ~]
         :_  state
         (send [200 ~ [%manx ~(home view state)]])
+        ::
+          [%apps %pharos %settings ~]
+        :_  state
+        (send [200 ~ [%manx ~(settings view state)]])
         ::
           [%apps %pharos %ticket @t ~]
         =/  ticket-id  (slav %ud i.t.t.t.site)

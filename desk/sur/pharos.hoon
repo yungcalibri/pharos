@@ -84,6 +84,13 @@
       reply-to=@ud
   ==
 ::
+::  configuration for github issues integration
++$  github-config
+  $:  owner=@t
+      repo=@t
+      token=@t
+  ==
+::
 ::  actions
 +$  pharos-action
   $%  $:  %create-board
@@ -109,5 +116,10 @@
       $:  %edit-ticket-status
           id=@ud
           =ticket-status
+      ==
+      $:  %set-github-credentials
+          owner=@t
+          repo=@t
+          token=@t
   ==  ==
 --
