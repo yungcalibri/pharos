@@ -92,7 +92,24 @@
     ==
   ::
   ++  on-leave  on-leave:def
-  ++  on-agent  on-agent:def
+  ++  on-agent  
+    |=  [=wire =sign:agent:gall]
+    ^-  (quip card _this)
+    ?+  -.wire  (on-agent:def wire sign)
+      %thread
+      ?+  -.sign  (on-agent:def wire sign)
+          %fact  
+        ?+     p.cage.sign  (on-agent:def wire sign)
+              %thread-fail
+              =/  err  !<  (pair term tang)  q.cage.sign
+              %-  (slog leaf+"Thread failed: {(trip p.err)}" q.err)
+              `this
+            ::
+              %thread-done
+              `this
+        ==
+      ==
+    ==
   ++  on-arvo  on-arvo:def
   ++  on-fail  on-fail:def
   --
@@ -173,6 +190,36 @@
       ~&  token+token.act
       =/  new-config=github-config  +.act
       [~ state(gh-config new-config)]
+      ::
+        %export-ticket
+        ?-  export-location.act
+          %export-csv
+            [~ state]
+          %export-json    
+          ~&  -:!>(*ticket)
+          [~ state]
+          %github-issues
+          =/  ghtoken  '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'
+          =/  ghurl    'https://api.github.com/repos/dannulbortux/test-repository/issues'      
+          :: =/  ta-now  `@ta`(scot %da now.bowl)
+          =/  i  0
+          =/  outcards  *(list card)          
+          |-          
+          ?:  =((lent ids.act) i)                 
+            :-  ^-  (list card)
+              outcards
+            state      
+          =/  twire  `@ta`(crip (weld (a-co:co (snag i ids.act)) (trip (scot %da now.bowl))))
+          =/  tid  `@ta`(crip (weld (a-co:co (snag i ids.act)) (trip (cat 3 'thread_' (scot %uv (sham eny.bowl))))))
+          =/  thisticket  +:(~(get by tickets) (snag i ids.act))
+          =/  start-args  [~ `tid byk.bowl(r da+now.bowl) %ghi-thread !>([~ ghurl ghtoken thisticket])]
+          =/  acard  [%pass /thread/[twire] %agent [our.bowl %spider] %watch /thread-result/[tid]]
+          =/  bcard  [%pass /thread/[twire] %agent [our.bowl %spider] %poke %spider-start !>(start-args)]
+          =/  ccards  `(list card)`~[acard bcard]
+          %=  $
+            outcards  (weld `(list card)`outcards `(list card)`ccards)
+            i         +(i)        
+          ==
     ==
   ::
   ++  handle-http
