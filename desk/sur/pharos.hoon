@@ -32,7 +32,6 @@
       board=@tas
       date-created=@da
       date-updated=@da
-      status=ticket-status
     ::  RFU
       priority=ticket-priority
       labels=(set label)
@@ -84,11 +83,11 @@
       reply-to=@ud
   ==
 ::
-::  configuration for github issues integration
-+$  github-config
-  $:  owner=@t
-      repo=@t
-      token=@t
+::  export
++$  export-location
+  $%  %export-csv
+      %export-json
+      %github-issues
   ==
 ::
 ::  actions
@@ -105,21 +104,12 @@
           =app-version
           =ticket-type
       ==
+      $:  %export-ticket
+          ids=(list @ud)
+          =export-location
+      ==
       $:  %delete-ticket
           id=@ud
           =desk
-      ==
-      $:  %edit-ticket-type
-          id=@ud
-          =ticket-type
-      ==
-      $:  %edit-ticket-status
-          id=@ud
-          =ticket-status
-      ==
-      $:  %edit-github-config
-          owner=@t
-          repo=@t
-          token=@t
   ==  ==
 --
