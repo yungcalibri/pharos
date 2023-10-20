@@ -20,7 +20,22 @@
 ++  nav
   ^-  manx
   ;nav#topnav
-    ;h1: Tickets
+    ;cluster-l(align "center")
+      ;a/"/apps/pharos"
+        ;h1: Tickets
+      ==
+      ;a/"/apps/pharos/settings"
+        ;h1: Settings
+      ==
+    ==
+    ;cluster-l.logotype(space "var(--s-1)")
+      ;span: P
+      ;span: H
+      ;span: A
+      ;span: R
+      ;span: O
+      ;span: S
+    ==
   ==
 ::
 ++  home
@@ -172,7 +187,9 @@
   %-  page
   ;div#settings
     ;+  nav
-    ;p: Settings
+    ;center-l
+      ;p: Settings
+    ==
   ==
 ::
 ++  style
@@ -228,11 +245,25 @@
   #topnav {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s0);
     background: var(--pc-seagreen-500);
     color: var(--pc-neut-800);
     padding: var(--s0);
     padding-top: var(--s2);
+  }
+  #topnav .logotype {
+    font-size: 150%;
+    border-radius: var(--s-2);
+    padding-inline: var(--s-1);
+    padding-block: var(--s-2);
+    background-color: var(--pc-aquamarine-500);
+    color: var(--pc-yellow-800);
+  }
+  #topnav :any-link {
+    color: var(--pc-neut-800);
   }
   #ticket-list {
     border-width: var(--s-4);
