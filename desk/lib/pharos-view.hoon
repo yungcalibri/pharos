@@ -28,7 +28,7 @@
         ;h1: Settings
       ==
     ==
-    ;cluster-l.logotype(space "var(--s-1)")
+    ;cluster-l.logotype(space "var(--s0)")
       ;span: P
       ;span: H
       ;span: A
@@ -245,11 +245,11 @@
   '''
   :root {
     --measure: 70ch;
-    --pc-aquamarine-800: #0C7489;
-    --pc-aquamarine-500: #4BB3BE;
-    --pc-aquamarine-200: #368C96;
-    --pc-seagreen-800:   #12AFCE;
-    --pc-seagreen-500:   #78C6CE;
+    --pc-aquamarine-800: #4BB3BE;
+    --pc-aquamarine-500: #368C96;
+    --pc-aquamarine-200: #0C7489;
+    --pc-seagreen-800:   #78C6CE;
+    --pc-seagreen-500:   #12AFCE;
     --pc-seagreen-200:   #08505E;
     --pc-yellow-800:     #F9D939;
     --pc-yellow-500:     #EFCA08;
@@ -311,12 +311,18 @@
     margin-bottom: var(--s0);
   }
   #topnav .logotype {
-    font-size: 150%;
-    border-radius: var(--s-2);
-    padding-inline: var(--s-1);
-    padding-block: var(--s-2);
-    background-color: var(--pc-aquamarine-500);
-    color: var(--pc-yellow-800);
+    font-size: 175%;
+    font-weight: bold;
+    border-radius: var(--s-3);
+    padding-inline: var(--s2);
+    padding-block: var(--s-5);
+    border-color: var(--pc-neut-700);
+    border-style: solid ridge;
+    border-width: var(--s-3) 0;
+    color: var(--pc-neut-800);
+  }
+  #topnav .logotype::after, #topnav .logotype::before {
+    content: "·";
   }
   #topnav :any-link {
     color: var(--pc-neut-800);
@@ -360,15 +366,16 @@
     border-radius: var(--s-4);
   }
   .pill.interact, .pill.modify {
+    border: 2px solid var(--pc-aquamarine-200);
+    background-color: var(--pc-aquamarine-500);
     cursor: pointer;
+  }
+  .pill.interact:has(.modify) {
+    background-color: var(--pc-aquamarine-200);
   }
   .pill.interact:not(:has(.modify))::after {
     padding-left: 1ch;
-    content: '✐';
-  }
-  .pill.modify::after {
-    padding-left: 1ch;
-    content: '✎';
+    content: '⟠';
   }
   .pill .value {
     color: var(--pc-yellow-800);
