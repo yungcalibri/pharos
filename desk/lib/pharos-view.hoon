@@ -58,7 +58,7 @@
               ;th: type
               ;th: issue
               ;th: from
-              ;th: priority
+              ;th: status
               ;th: date created
             ==
           ==
@@ -78,7 +78,7 @@
               ;td:"{(trip `@t`ticket-type.ticket)}"
               ;td:"{dex}"
               ;td:"{<author.ticket>}"
-              ;td:"{(trip `@t`priority.ticket)}"
+              ;td:"{(trip `@t`status.ticket)}"
               ;td:"{<y.-.dat>} - {<m.dat>} - {<d.t.dat>}"
             ==
           ==
