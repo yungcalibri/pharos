@@ -80,41 +80,86 @@
   %-  page
   ^-  manx
   ;article.ticket(data-ticket-id (scow %ud id.ticket))
-    ;stack-l
-      ;header
-        ;stack-l(space "var(--s-2)")
-          ;h2: {(trip title.ticket)}
+    ;header
+      ;stack-l(space "var(--s-2)")
+        ;sidebar-l(side "right", sideWidth "calc(var(--s5) + var(--s1))")
           ;div
-            ; Last updated:
-            ;+  (formatted-date.c date-updated.ticket)
-          ==
-          ;cluster-l.ticket-features
-            ;div.pill
-              ;header: id
-              ;div: {<id.ticket>}
+            ;h2: {(trip title.ticket)}
+            ;div
+              ; Last updated:
+              ;+  (formatted-date.c date-updated.ticket)
             ==
-            ;div.pill.monospace
-              ;header: author
-              ;div: {<author.ticket>}
-            ==
-            ;div.pill.monospace
-              ;header: app
-              ;div: {<board.ticket>}
+            ;div
+              ;a/"/apps/talk/dm/{<author.ticket>}"
+                =target  "_blank"
+                =rel     "noopener noreferer"
+                ; DM {<author.ticket>} in Talk
+              ==
             ==
           ==
-          ;div
-            ;a/"/apps/talk/dm/{<author.ticket>}"
-              =target  "_blank"
-              =rel     "noopener noreferer"
-              ; DM {<author.ticket>} in Talk
-            ==
-          ==
+          ;+  (ticket-features ticket)
         ==
       ==
-      ;hr;
-      ;div.body
-        ; {(trip body.ticket)}
-      ==
+    ==
+    ;hr;
+    ;div.body
+      ; {(trip body.ticket)}
+    ==
+  ==
+::
+++  ticket-features
+  |=  =ticket
+  ^-  manx
+  ;cluster-l.ticket-details(space "var(--s-3)")
+    ;div.pill
+      ;span:"id "
+      ;span.value: {<id.ticket>}
+    ==
+    ;div.pill
+      ;span:"author "
+      ;span.value: {<author.ticket>}
+    ==
+    ;div.pill
+      ;span:"app "
+      ;span.value: {<board.ticket>}
+    ==
+    ;div.pill.interact
+      =data-ticket-status  (trip `@t`status.ticket)
+      =hx-get  "/apps/pharos/ticket/{<id.ticket>}/edit/status"
+      ;span:"status "
+      ;span.value: {(trip `@t`status.ticket)}
+    ==
+  ==
+::
+++  edit-ticket-status
+  |=  =ticket
+  ^-  manx
+  ;div.pill
+    =hx-target  "closest .ticket-details"
+    ; Status
+    ;div.pill.modify
+      =data-ticket-status  "new"
+      =hx-post  "/apps/pharos/ticket/{<id.ticket>}/edit/status/new"
+      =include-vals  "status: 'new'"
+      ;span.value: new
+    ==
+    ;div.pill.modify
+      =data-ticket-status  "in-progress"
+      =hx-post  "/apps/pharos/ticket/{<id.ticket>}/edit/status/in-progress"
+      =include-vals  "status: 'in-progress'"
+      ;span.value: in progress
+    ==
+    ;div.pill.modify
+      =data-ticket-status  "resolved"
+      =hx-post  "/apps/pharos/ticket/{<id.ticket>}/edit/status/resolved"
+      =include-vals  "status: 'resolved'"
+      ;span.value: resolved
+    ==
+    ;div.pill.modify
+      =data-ticket-status  "dropped"
+      =hx-post  "/apps/pharos/ticket/{<id.ticket>}/edit/status/dropped"
+      =include-vals  "status: 'dropped'"
+      ;span.value: dropped
     ==
   ==
 ::
@@ -206,26 +251,28 @@
   }
   .pill {
     min-width: var(--s2);
-    overflow: hidden;
+    padding-inline: var(--s-3);
+    padding-block: var(--s-4);
     font-family: monospace;
     font-size: 90%;
     text-align: center;
     background-color: var(--pc-aquamarine-200);
-    color: var(--pc-neut-800);
+    color: var(--pc-neut-600);
     border-radius: var(--s-4);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
-  .pill > header {
-    width: 100%;
-    font-size: 80%;
-    padding-inline: var(--s-4);
-    background-color: var(--pc-seagreen-200);
-    color: var(--pc-neut-200);
+  .pill.interact, .pill.modify {
+    cursor: pointer;
   }
-  .pill > header + div {
-    padding: var(--s-3);
+  .pill.interact:not(:has(.modify))::after {
+    padding-left: 1ch;
+    content: '✐';
+  }
+  .pill.modify::after {
+    padding-left: 1ch;
+    content: '✎';
+  }
+  .pill .value {
+    color: var(--pc-yellow-800);
   }
   .monospace, .formatted-date {
     font-family: monospace;

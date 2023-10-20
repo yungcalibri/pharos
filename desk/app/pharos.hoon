@@ -1,5 +1,5 @@
 /-  *pharos
-/+  dbug, default-agent, schooner, server, view=pharos-view
+/+  dbug, default-agent, *pharos, schooner, server, view=pharos-view
 |%
 +$  card  card:agent:gall
 +$  versioned-state
@@ -64,6 +64,9 @@
           ::
             %'GET'
           ~(get handle-http:hc req)
+          ::
+            %'POST'
+          ~(pot handle-http:hc req)
         ==
         ::
       [cards this]
@@ -131,6 +134,7 @@
                                  ::  defaults only for now
                                  date-created=now.bowl
                                  date-updated=now.bowl
+                                 status=%new
                                  priority=%none
                                  labels=~
                                  date-resolved=~
@@ -150,6 +154,16 @@
       =.  tickets.bod  (~(del by tickets.bod) id.act)
       =.  boards       (~(put by boards) desk.act bod)
       [~ state]
+      ::
+        %edit-ticket-type
+      =/  got=ticket  (~(got by tickets) id.act)
+      =.  ticket-type.got  ticket-type.act
+      [~ state(tickets (~(put by tickets) id.act got))]
+      ::
+        %edit-ticket-status
+      =/  got=ticket  (~(got by tickets) id.act)
+      =.  status.got  ticket-status.act
+      [~ state(tickets (~(put by tickets) id.act got))]
     ==
   ::
   ++  handle-http
@@ -172,10 +186,55 @@
           [%apps %pharos %ticket @t ~]
         =/  ticket-id  (slav %ud i.t.t.t.site)
         =/  got  (~(get by tickets) ticket-id)
-        ?~  got
-          ~|("No ticket with id {<ticket-id>}" dump)
+        ?~  got  ~|("No ticket with id {<ticket-id>}" dump)
         :_  state
         (send [200 ~ [%manx (~(ticket-detail view state) u.got)]])
+        ::
+          [%apps %pharos %ticket @t %features ~]
+        =/  ticket-id  (slav %ud i.t.t.t.site)
+        =/  got  (~(get by tickets) ticket-id)
+        ?~  got  ~|("No ticket with id {<ticket-id>}" dump)
+        :_  state
+        (send [200 ~ [%manx (~(ticket-features view state) u.got)]])
+        ::
+          [%apps %pharos %ticket @t %edit %status ~]
+        =/  ticket-id  (slav %ud i.t.t.t.site)
+        =/  got  (~(get by tickets) ticket-id)
+        ?~  got  ~|("No ticket with id {<ticket-id>}" dump)
+        :_  state
+        (send [200 ~ [%manx (~(edit-ticket-status view state) u.got)]])
+      ==
+    ::
+    ++  pot
+      ^-  (quip card _state)
+      =/  site  site.req
+      =*  body  body.request.inbound-request
+      ?~  body
+        ~|("No request body" derp)
+      ?+    site  dump
+        ::
+          [%apps %pharos %ticket @t %edit %status @t ~]
+        =/  ticket-id  (slav %ud i.t.t.t.site)
+        =/  got  (~(get by tickets) ticket-id)
+        ?~  got
+          ~|("No ticket with id {<ticket-id>}" derp)
+        =/  status-param  `@tas`(slav %tas i.t.t.t.t.t.t.site)
+        ?.  ?=(ticket-status status-param)
+          ~|("{(trip `@t`status-param)} is not a valid ticket status" derp)
+        =/  scat=(unit (quip card _state))
+          %-  mole
+          |.
+          %-  handle-action
+          `pharos-action`[%edit-ticket-status ticket-id status-param]
+        ?~  scat 
+          ~|("Failed to update the status of ticket {<ticket-id>}" derp)
+        :_  +.u.scat
+        %+  weld
+          -.u.scat
+        %-  send
+        :*  303  ~  %redirect
+            (crip "/apps/pharos/ticket/{<ticket-id>}/features")
+        ==
       ==
     --
   --

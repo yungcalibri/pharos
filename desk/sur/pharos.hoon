@@ -32,6 +32,7 @@
       board=@tas
       date-created=@da
       date-updated=@da
+      status=ticket-status
     ::  RFU
       priority=ticket-priority
       labels=(set label)
@@ -100,5 +101,13 @@
       $:  %delete-ticket
           id=@ud
           =desk
+      ==
+      $:  %edit-ticket-type
+          id=@ud
+          =ticket-type
+      ==
+      $:  %edit-ticket-status
+          id=@ud
+          =ticket-status
   ==  ==
 --
