@@ -173,6 +173,18 @@
       ~&  token+token.act
       =/  new-config=github-config  +.act
       [~ state(gh-config new-config)]
+      ::
+        %edit-comment
+      =/  got=ticket    (~(got by tickets) reply-to.act)
+      =/  =comment      :*  id=0
+                            body=body.act
+                            author=our.bowl
+                            date-created=date.act
+                            date-updated=now.bowl
+                            reply-to=reply-to.act
+                        ==
+      =.  comments.got  (~(put by comments.got) id.comment comment)
+      [~ state(tickets (~(put by tickets) reply-to.act got))]
     ==
   ::
   ++  handle-http
@@ -216,8 +228,19 @@
         ?~  got  ~|("No ticket with id {<ticket-id>}" dump)
         :_  state
         (send [200 ~ [%manx (~(edit-ticket-status view state) u.got)]])
+        ::
+          [%apps %pharos %ticket @t %edit %comment ~]
+        =/  ticket-id  (slav %ud i.t.t.t.site)
+        =/  got  (~(get by tickets) ticket-id)
+        ?~  got  ~|("No ticket with id {<ticket-id>}" dump)
+        ?~  comments.u.got  
+          =/  comments  (malt (limo ~[[0 (new-comment ticket-id)]]))
+          :_  state 
+          (send [200 ~ [%manx (~(edit-comment view state) comments)]])
+        :_  state
+        (send [200 ~ [%manx (~(edit-comment view state) comments.u.got)]])
       ==
-    ::
+    ::  need
     ++  pot
       ^-  (quip card _state)
       =/  site  site.req
@@ -248,6 +271,36 @@
         :*  303  ~  %redirect
             (crip "/apps/pharos/ticket/{<ticket-id>}/features")
         ==
+        ::
+        [%apps %pharos %ticket @t %edit %comment @t ~]
+        =/  ticket-id  (slav %ud i.t.t.t.site)
+        ~&  body
+        =/  jon=(unit json)  (de:json:html q.u.body)
+        =/  dejs-body=@t  (dejs-comment (need jon))
+        =/  scat=(unit (quip card _state))
+          %-  mole
+          |.
+          %-  handle-action
+          `pharos-action`[%edit-comment ticket-id dejs-body now.bowl]
+        ?~  scat 
+          ~|("Failed to update the status of ticket {<ticket-id>}" derp)
+        :_  +.u.scat
+        %+  weld
+          -.u.scat
+        %-  send
+        :*  303  ~  %redirect
+            (crip "/apps/pharos/ticket/{<ticket-id>}")  ::fix this
+        ==
+      ==
+      ++  new-comment 
+      |=  ticket-id=@ud
+      ^-  comment
+      :*  id=0
+          body=''
+          author=our.bowl
+          date-created=now.bowl
+          date-updated=now.bowl
+          reply-to=ticket-id
       ==
     --
   --
