@@ -15,4 +15,11 @@
   :-  %edit-github-config
   %.  jon
   (ot ~[repo+so owner+so token+so])
+::
+++  dejs-comment
+  |=  jon=json
+  =,  dejs:format
+  ^-  @t
+  %.  jon
+  (ot ~[body+so])
 --

@@ -121,5 +121,10 @@
           owner=@t
           repo=@t
           token=@t
-  ==  ==
+      ==
+      $:  %edit-comment
+          reply-to=@ud
+          body=@t
+          date=@da  
+  ==  == 
 --

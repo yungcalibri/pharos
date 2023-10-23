@@ -98,6 +98,7 @@
 ::  ticket detail view
 ++  ticket-detail
   |=  =ticket
+  =/  comments  ~(tap by comments.ticket)
   %-  page
   ^-  manx
   ;article.ticket(data-ticket-id (scow %ud id.ticket))
@@ -125,6 +126,27 @@
     ;hr;
     ;div.body
       ; {(trip body.ticket)}
+      ;+  ?~  comments
+        ;div
+        =hx-swap  "outerHTML"
+        =hx-get  "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
+        ; "make a comment"
+      ==
+      ;div.comments
+      ;*  %+  turn  comments
+        |=  [id=@ud =comment]
+        ;div.comment(comment-id (scow %ud id.comment))
+          ;h3
+          ;+  (formatted-date.c date-updated.comment)
+          ==
+        ;h2: {(trip body.comment)}
+        ;div.pill.interact
+          =hx-swap  "outerHTML"
+          =hx-get  "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
+          ;span:"Edit"
+    ==
+        ==
+      ==
     ==
   ==
 ::
@@ -183,6 +205,17 @@
       ;span.value: dropped
     ==
   ==
+::
+++  edit-comment
+|=  comments=(map @ud comment)
+^-  manx
+=/  =comment  (~(got by comments) 0)  ::currently support only one comment
+;div
+  ;form(hx-post "/apps/pharos/ticket/{<reply-to.comment>}/edit/comment/{<id.comment>}", hx-target "#ticket-content")
+    ;textarea(type "text", name "body", required "");
+    ;button: done
+  ==
+==
 ::
 ++  settings
   ^-  manx
