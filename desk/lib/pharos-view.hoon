@@ -98,7 +98,7 @@
 ::  ticket detail view
 ++  ticket-detail
   |=  =ticket
-  =/  comments  ~(tap by comments.ticket)
+  =/  cut=(unit comment)  (~(get by comments.ticket) 0)
   %-  page
   ^-  manx
   ;article.ticket(data-ticket-id (scow %ud id.ticket))
@@ -123,28 +123,30 @@
         ==
       ==
     ==
-    ;hr;
     ;div.body
       ; {(trip body.ticket)}
-      ;+  ?~  comments
-        ;div
-        =hx-swap  "outerHTML"
-        =hx-get  "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
-        ; "make a comment"
-      ==
-      ;div.comments
-      ;*  %+  turn  comments
-        |=  [id=@ud =comment]
-        ;div.comment(comment-id (scow %ud id.comment))
-          ;h3
-          ;+  (formatted-date.c date-updated.comment)
-          ==
-        ;h2: {(trip body.comment)}
-        ;div.pill.interact
-          =hx-swap  "outerHTML"
-          =hx-get  "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
-          ;span:"Edit"
     ==
+    ;hr;
+    ;div.comments
+      ;+  ?~  cut
+        ::  if no comment
+        ;button.pill.interact
+          =hx-get     "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
+          =hx-target  "closest .comments"
+          =hx-swap    "outerHTML"
+          ; "make a comment"
+        ==
+      ::  if comment
+      ;div.comment(comment-id (scow %ud id.u.cut))
+        ;h3
+          ;+  (formatted-date.c date-updated.u.cut)
+        ==
+        ;p: {(trip body.u.cut)}
+        ;div.pill.interact
+          =hx-get     "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
+          =hx-target  "closest .comments"
+          =hx-swap    "outerHTML"
+          ;span:"Edit"
         ==
       ==
     ==
@@ -207,15 +209,19 @@
   ==
 ::
 ++  edit-comment
-|=  comments=(map @ud comment)
-^-  manx
-=/  =comment  (~(got by comments) 0)  ::currently support only one comment
-;div
-  ;form(hx-post "/apps/pharos/ticket/{<reply-to.comment>}/edit/comment/{<id.comment>}", hx-target "#ticket-content")
-    ;textarea(type "text", name "body", required "");
-    ;button: done
+  |=  comments=(map @ud comment)
+  ^-  manx
+  =/  =comment  (~(got by comments) 0)  ::currently support only one comment
+  ;div
+    ;form
+      =hx-post    "/apps/pharos/ticket/{<reply-to.comment>}/edit/comment/{<id.comment>}"
+      =hx-target   "#ticket-content"
+      ;textarea(type "text", name "body", required "", rows "4", cols "40")
+        ; {(trip body.comment)}
+      ==
+      ;button: done
+    ==
   ==
-==
 ::
 ++  settings
   ^-  manx
