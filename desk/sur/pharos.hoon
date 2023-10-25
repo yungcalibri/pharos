@@ -86,7 +86,6 @@
 ::  export
 +$  export-location
   $%  %export-csv
-      %export-json
       %github-issues
   ==
 ::
