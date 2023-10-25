@@ -134,15 +134,16 @@
           =hx-get     "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
           =hx-target  "closest .comments"
           =hx-swap    "outerHTML"
-          ; "make a comment"
+          ; make a comment
         ==
       ::  if comment
       ;div.comment(comment-id (scow %ud id.u.cut))
         ;h3
+          ; {"Comment: "}
           ;+  (formatted-date.c date-updated.u.cut)
         ==
         ;p: {(trip body.u.cut)}
-        ;div.pill.interact
+        ;button.pill.interact
           =hx-get     "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
           =hx-target  "closest .comments"
           =hx-swap    "outerHTML"
@@ -437,7 +438,7 @@
   }
   .pill.interact:not(:has(.modify))::after {
     padding-left: 1ch;
-    content: '⟠';
+    content: '✎';
   }
   .pill .value {
     color: var(--pc-yellow-800);
