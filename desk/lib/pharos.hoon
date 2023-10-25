@@ -10,7 +10,7 @@
 ::
 ++  dejs-github-config
   |=  jon=json
-  ^-  pharos-action
+  ^-  action
   =,  dejs:format
   :-  %edit-github-config
   %.  jon

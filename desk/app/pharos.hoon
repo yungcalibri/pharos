@@ -74,8 +74,9 @@
       [cards this]
       ::
         %pharos-action
-      ?>  =(src.bowl our.bowl)
-      =/  act  !<(pharos-action vase)
+        ~&  'pharos-action?'
+      ::?>  =(src.bowl our.bowl)
+      =/  act  !<(action vase)
       =^  cards  state
         (handle-action:hc act)
       [cards this]
@@ -104,7 +105,7 @@
   ++  do-nothing  ~
   ::
   ++  handle-action
-    |=  act=pharos-action
+    |=  act=action
     ^-  (quip card _state)
     ?-    -.act
       ::
@@ -250,7 +251,7 @@
           [%apps %pharos %settings %github-config ~]
         =/  jon=(unit json)  (de:json:html q.u.body.request.inbound-request)
         ?~  jon  ~|("Could not parse request body to JSON" derp)
-        =/  act=pharos-action  (dejs-github-config u.jon)
+        =/  act=action  (dejs-github-config u.jon)
         =/  scat=(unit (quip card _state))
           (mole |.((handle-action act)))
         ?~  scat  ~|("Could not apply the updated config" derp)
@@ -271,7 +272,7 @@
           %-  mole
           |.
           %-  handle-action
-          `pharos-action`[%edit-ticket-status ticket-id status-param]
+          `action`[%edit-ticket-status ticket-id status-param]
         ?~  scat 
           ~|("Failed to update the status of ticket {<ticket-id>}" derp)
         :_  +.u.scat
@@ -291,7 +292,7 @@
           %-  mole
           |.
           %-  handle-action
-          `pharos-action`[%edit-comment ticket-id dejs-body now.bowl]
+          `action`[%edit-comment ticket-id dejs-body now.bowl]
         ?~  scat 
           ~|("Failed to update the status of ticket {<ticket-id>}" derp)
         :_  +.u.scat

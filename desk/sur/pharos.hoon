@@ -92,7 +92,7 @@
   ==
 ::
 ::  actions
-+$  pharos-action
++$  action
   $%  $:  %create-board
           =desk
       ==
