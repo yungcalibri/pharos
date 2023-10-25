@@ -1,0 +1,9 @@
+:~  [%title 'Pharos']
+    [%info 'A support concierge for your Urbit apps']
+    [%color 0x18.206f]
+    [%version [0 0 0]]
+    [%website 'https://github.com/yungcalibri/pharos']
+    [%license 'FU']
+    [%site /apps/pharos]
+==
+

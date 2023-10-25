@@ -1,5 +1,5 @@
 /-  *pharos
-/+  dbug, default-agent, *pharos, schooner, server, view=pharos-view, grip
+/+  dbug, default-agent, *pharos, schooner, server, view=pharos-view
 |%
 +$  card  card:agent:gall
 +$  versioned-state
@@ -20,12 +20,6 @@
 --
 =|  state-0
 =*  state  -
-%-  %-  agent:grip
-  :*
-  ~zod         
-  [0 0 0]
-  /apps/pharos
-  ==   
 %-  agent:dbug
 ^-  agent:gall
 =<
@@ -80,26 +74,14 @@
       [cards this]
       ::
         %pharos-action
-        ~&  'pharos-action?'
-      ::?>  =(src.bowl our.bowl)
-      =/  act  !<(action vase)
+      ?>  =(src.bowl our.bowl)
+      =/  act  !<(pharos-action vase)
       =^  cards  state
         (handle-action:hc act)
       [cards this]
     ==
   ::
-  ++  on-peek
-    |=  =path
-    ^-  (unit (unit cage))
-    ?+    path  (on-peek:def path)
-      ::
-        [%x %ticket @ud ~]
-      =/  =ticket  (~(got by tickets) `@ud`i.t.t.path)
-      ``ticket+!>(ticket)
-      ::
-        [%x %all-tickets ~]
-      ``tickets+!>(~(val by tickets))
-    ==
+  ++  on-peek  on-peek:def
   ::
   ++  on-watch
     |=  =path
@@ -110,26 +92,7 @@
     ==
   ::
   ++  on-leave  on-leave:def
-  ::
-  ++  on-agent
-    |=  [=wire =sign:agent:gall]
-    ^-  (quip card _this)
-    ?+  -.wire  (on-agent:def wire sign)
-      %thread
-      ?+  -.sign  (on-agent:def wire sign)
-          %fact  
-        ?+     p.cage.sign  (on-agent:def wire sign)
-              %thread-fail
-              =/  err  !<  (pair term tang)  q.cage.sign
-              %-  (slog leaf+"Thread failed: {(trip p.err)}" q.err)
-              `this
-            ::
-              %thread-done
-              `this
-        ==
-      ==
-    ==
-  ::
+  ++  on-agent  on-agent:def
   ++  on-arvo  on-arvo:def
   ++  on-fail  on-fail:def
   --
@@ -138,18 +101,10 @@
 ++  hc
   |_  =bowl:gall
   ::
-  ++  new-comment
-    |=  ticket-id=@ud
-    =+  *comment
-    %=  -
-      author        our.bowl
-      date-created  now.bowl
-      date-updated  now.bowl
-      reply-to      ticket-id
-    ==
+  ++  do-nothing  ~
   ::
   ++  handle-action
-    |=  act=action
+    |=  act=pharos-action
     ^-  (quip card _state)
     ?-    -.act
       ::
@@ -170,7 +125,6 @@
       ::  use & increment next-ticket-id
       ~&  ['action in pharos' act]
       =/  author=@p         ?.(anon.act src.bowl ~zod)
-      ::=/  tt  ;;  ticket-type  ticket-type.act
       ::=/  add-to             (~(got by boards) desk.act)
       =/  new-ticket=ticket  :*  id=next-ticket-id
                                  title=title.act
@@ -231,42 +185,6 @@
                         ==
       =.  comments.got  (~(put by comments.got) id.comment comment)
       [~ state(tickets (~(put by tickets) reply-to.act got))]
-      ::
-        %export-tickets
-      ?.  ?&  ?!  =('' owner.gh-config)
-              ?!  =('' repo.gh-config)
-              ?!  =('' token.gh-config)
-          ==
-          ~|("Github credentials have not been configured" !!)
-      ?>  =(%github-issues export-location.act)
-      ?>  (roll ids.act |=([id=@ud acc=?] ?&((~(has by tickets) id) acc)))
-      =/  ghpath=path  :~  'api.github.com'
-                           'repos'
-                           owner.gh-config
-                           repo.gh-config
-                           'issues'
-                       ==
-      =/  ghurl=tape  "https:/{(trip (spat ghpath))}"
-      =|  outcards=(list card)
-      =/  i  0
-      |-
-      ?:  =((lent ids.act) i)
-        [outcards state]
-      =/  id  (snag i ids.act)
-      =/  tic  (~(got by tickets) id)
-      =/  twire=@ta  (crip (weld (a-co:co id) (trip (scot %da now.bowl))))
-      =/  tid=@ta  (crip (weld (a-co:co id) (trip (cat 3 'thread_' (scot %uv (sham eny.bowl))))))
-      =/  start-args  [~ `tid byk.bowl(r da+now.bowl) %ghi-thread !>([~ ghurl token.gh-config tic])]
-      =/  acard  :*  %pass  /thread/[twire]  %agent  [our.bowl %spider]
-                     %watch  /thread-result/[tid]
-                 ==
-      =/  bcard  :*  %pass  /thread/[twire]  %agent  [our.bowl %spider]
-                     %poke  %spider-start  !>(start-args)
-                 ==
-      %=  $
-        outcards  (weld outcards `(list card)`~[acard bcard])
-        i         +(i)
-      ==
     ==
   ::
   ++  handle-http
@@ -332,7 +250,7 @@
           [%apps %pharos %settings %github-config ~]
         =/  jon=(unit json)  (de:json:html q.u.body.request.inbound-request)
         ?~  jon  ~|("Could not parse request body to JSON" derp)
-        =/  act=action  (dejs-github-config u.jon)
+        =/  act=pharos-action  (dejs-github-config u.jon)
         =/  scat=(unit (quip card _state))
           (mole |.((handle-action act)))
         ?~  scat  ~|("Could not apply the updated config" derp)
@@ -353,7 +271,7 @@
           %-  mole
           |.
           %-  handle-action
-          `action`[%edit-ticket-status ticket-id status-param]
+          `pharos-action`[%edit-ticket-status ticket-id status-param]
         ?~  scat 
           ~|("Failed to update the status of ticket {<ticket-id>}" derp)
         :_  +.u.scat
@@ -364,7 +282,7 @@
             (crip "/apps/pharos/ticket/{<ticket-id>}/features")
         ==
         ::
-          [%apps %pharos %ticket @t %edit %comment @t ~]
+        [%apps %pharos %ticket @t %edit %comment @t ~]
         =/  ticket-id  (slav %ud i.t.t.t.site)
         ~&  body
         =/  jon=(unit json)  (de:json:html q.u.body)
@@ -373,7 +291,7 @@
           %-  mole
           |.
           %-  handle-action
-          `action`[%edit-comment ticket-id dejs-body now.bowl]
+          `pharos-action`[%edit-comment ticket-id dejs-body now.bowl]
         ?~  scat 
           ~|("Failed to update the status of ticket {<ticket-id>}" derp)
         :_  +.u.scat
@@ -381,21 +299,18 @@
           -.u.scat
         %-  send
         :*  303  ~  %redirect
-            (crip "/apps/pharos/ticket/{<ticket-id>}")
+            (crip "/apps/pharos/ticket/{<ticket-id>}")  ::fix this
         ==
-        ::
-          [%apps %pharos %ticket @t %export ~]
-        =/  ticket-id  (slav %ud i.t.t.t.site)
-        =/  scat=(unit (quip card _state))
-          %-  mole
-          |.
-          %-  handle-action
-          `action`[%export-tickets ~[ticket-id] %github-issues]
-        ?~  scat  ~|("Exporting ticket {<ticket-id>} failed" derp)
-        :_  +.u.scat
-        %+  weld
-          -.u.scat
-        (send [200 ~ %manx ~(success view state)])
+      ==
+      ++  new-comment 
+      |=  ticket-id=@ud
+      ^-  comment
+      :*  id=0
+          body=''
+          author=our.bowl
+          date-created=now.bowl
+          date-updated=now.bowl
+          reply-to=ticket-id
       ==
     --
   --
