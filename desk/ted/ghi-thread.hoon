@@ -6,13 +6,13 @@
 =/  m  (strand ,vase)
 ^-  form:m
 
-=/  uargs  !<([~ url=@t token=@t =ticket] arg)
-=/  url    url.uargs
+=/  uargs  !<([~ url=tape token=@t =ticket] arg)
+=/  url    (crip url.uargs)
 =/  token  token.uargs
 =/  title  title.ticket.uargs
 =/  body   body.ticket.uargs
-=/  auth  'Authorization'^(crip "Bearer {(trip token)}")
-=/  user  'User-Agent'^'Pharos Desk'
+=/  auth  ['Authorization' (crip "Bearer {(trip token)}")]
+=/  user  ['User-Agent' 'Pharos Desk']
 =/  headers=header-list:http  ~[auth user]
 =/  jsondata  %-  en:json:html
               o+(malt (limo ~[['title' s+title] ['body' s+body]]))
@@ -27,7 +27,7 @@
 ;<  ~  bind:m  (send-raw-card:strandio card)
 ;<  res=(pair wire sign-arvo)  bind:m  take-sign-arvo:strandio
 
-?>  ?=([%iris %http-response %finished *] q.res)
+?.  ?=([%iris %http-response %finished *] q.res)
   (strand-fail:strand %bad-sign ~)
 ~&  %thread-response^+.q.res
 ?~  full-file.client-response.q.res
