@@ -1,13 +1,9 @@
-  ::  /lib/etch.hoon
-::::  ~littel-wolfur, simplified by ~litlep-nibbyt
-::    Version ~2023.6.18
-::
 /+  *mip
 |%
 ::
 ++  show-json
   |=  =vase
-  (en-json:html (en-vase vase))
+  (en:json:html (en-vase vase))
 ::
 ++  en-vase
   |=  [typ=type arg=*]
