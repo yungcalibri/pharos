@@ -41,21 +41,21 @@
       :: thread=(list (pair ship time)) :: talk dms
   ==
 +$  ticket-type
-  $?  %request  :: feature request
+  $%  %request  :: feature request
       %support  :: support request
       %report   :: bug report
       %document :: documentation request
       %general  :: general feedback
   ==
 +$  ticket-priority
-  $?  %none  :: new ticket, not evaluated
+  $%  %none  :: new ticket, not evaluated
       %low
       %medium
       %high
       %urgent
   ==
 +$  ticket-status
-  $?  %new
+  $%  %new
       %in-progress
       %resolved
       %dropped
@@ -92,7 +92,7 @@
   ==
 ::
 ::  actions
-+$  action
++$  pharos-action
   $%  $:  %create-board
           =desk
       ==

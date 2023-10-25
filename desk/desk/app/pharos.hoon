@@ -74,9 +74,8 @@
       [cards this]
       ::
         %pharos-action
-        ~&  'pharos-action?'
-      ::?>  =(src.bowl our.bowl)
-      =/  act  !<(action vase)
+      ?>  =(src.bowl our.bowl)
+      =/  act  !<(pharos-action vase)
       =^  cards  state
         (handle-action:hc act)
       [cards this]
@@ -105,7 +104,7 @@
   ++  do-nothing  ~
   ::
   ++  handle-action
-    |=  act=action
+    |=  act=pharos-action
     ^-  (quip card _state)
     ?-    -.act
       ::
@@ -126,7 +125,6 @@
       ::  use & increment next-ticket-id
       ~&  ['action in pharos' act]
       =/  author=@p         ?.(anon.act src.bowl ~zod)
-      ::=/  tt  ;;  ticket-type  ticket-type.act
       ::=/  add-to             (~(got by boards) desk.act)
       =/  new-ticket=ticket  :*  id=next-ticket-id
                                  title=title.act
@@ -252,7 +250,7 @@
           [%apps %pharos %settings %github-config ~]
         =/  jon=(unit json)  (de:json:html q.u.body.request.inbound-request)
         ?~  jon  ~|("Could not parse request body to JSON" derp)
-        =/  act=action  (dejs-github-config u.jon)
+        =/  act=pharos-action  (dejs-github-config u.jon)
         =/  scat=(unit (quip card _state))
           (mole |.((handle-action act)))
         ?~  scat  ~|("Could not apply the updated config" derp)
@@ -273,7 +271,7 @@
           %-  mole
           |.
           %-  handle-action
-          `action`[%edit-ticket-status ticket-id status-param]
+          `pharos-action`[%edit-ticket-status ticket-id status-param]
         ?~  scat 
           ~|("Failed to update the status of ticket {<ticket-id>}" derp)
         :_  +.u.scat
@@ -293,7 +291,7 @@
           %-  mole
           |.
           %-  handle-action
-          `action`[%edit-comment ticket-id dejs-body now.bowl]
+          `pharos-action`[%edit-comment ticket-id dejs-body now.bowl]
         ?~  scat 
           ~|("Failed to update the status of ticket {<ticket-id>}" derp)
         :_  +.u.scat
