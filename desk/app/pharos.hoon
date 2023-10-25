@@ -1,5 +1,5 @@
 /-  *pharos
-/+  dbug, default-agent, *pharos, schooner, server, view=pharos-view
+/+  dbug, default-agent, schooner, server, view=pharos-view, json-ticket
 |%
 +$  card  card:agent:gall
 +$  versioned-state
@@ -10,12 +10,10 @@
       next-ticket-id=@ud
       next-comment-id=@ud
       next-label-id=@ud
-    ::  get rid of boards ? 
+::  get rid of boards ? 
       boards=(map desk board)
       tickets=(map @ud ticket)
       labels=(set label)
-    ::
-      gh-config=github-config
   ==
 --
 =|  state-0
@@ -66,9 +64,6 @@
           ::
             %'GET'
           ~(get handle-http:hc req)
-          ::
-            %'POST'
-          ~(pot handle-http:hc req)
         ==
         ::
       [cards this]
@@ -81,7 +76,16 @@
       [cards this]
     ==
   ::
-  ++  on-peek  on-peek:def
+  ++  on-peek
+  |=  =path
+  ^-  (unit (unit cage))
+  ?+    path  (on-peek:def path)
+      [%x %get-ticket-id @ud ~]  
+      =/  output-ticket  (need (~(get by tickets) (sub i.t.t.path 48)))      
+    ``ticket+!>(output-ticket)
+      [%x %get-all-tickets ~]  
+    ``tickets+!>(~(val by tickets))
+  ==
   ::
   ++  on-watch
     |=  =path
@@ -153,7 +157,6 @@
                                  ::  defaults only for now
                                  date-created=now.bowl
                                  date-updated=now.bowl
-                                 status=%new
                                  priority=%none
                                  labels=~
                                  date-resolved=~
@@ -174,34 +177,13 @@
       =.  boards       (~(put by boards) desk.act bod)
       [~ state]
       ::
-        %edit-ticket-type
-      =/  got=ticket  (~(got by tickets) id.act)
-      =.  ticket-type.got  ticket-type.act
-      [~ state(tickets (~(put by tickets) id.act got))]
-      ::
-        %edit-ticket-status
-      =/  got=ticket  (~(got by tickets) id.act)
-      =.  status.got  ticket-status.act
-      [~ state(tickets (~(put by tickets) id.act got))]
-      ::
-        %edit-github-config
-      ~&  owner+owner.act
-      ~&  repo+repo.act
-      ~&  token+token.act
-      =/  new-config=github-config  +.act
-      [~ state(gh-config new-config)]
-      ::
         %export-ticket
         ?-  export-location.act
           %export-csv
             [~ state]
-          %export-json    
-          ~&  -:!>(*ticket)
-          [~ state]
           %github-issues
           =/  ghtoken  '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'
           =/  ghurl    'https://api.github.com/repos/dannulbortux/test-repository/issues'      
-          :: =/  ta-now  `@ta`(scot %da now.bowl)
           =/  i  0
           =/  outcards  *(list card)          
           |-          
@@ -220,6 +202,7 @@
             outcards  (weld `(list card)`outcards `(list card)`ccards)
             i         +(i)        
           ==
+        ==
     ==
   ::
   ++  handle-http
@@ -239,72 +222,13 @@
         :_  state
         (send [200 ~ [%manx ~(home view state)]])
         ::
-          [%apps %pharos %settings ~]
-        :_  state
-        (send [200 ~ [%manx ~(settings view state)]])
-        ::
           [%apps %pharos %ticket @t ~]
         =/  ticket-id  (slav %ud i.t.t.t.site)
         =/  got  (~(get by tickets) ticket-id)
-        ?~  got  ~|("No ticket with id {<ticket-id>}" dump)
+        ?~  got
+          ~|("No ticket with id {<ticket-id>}" dump)
         :_  state
         (send [200 ~ [%manx (~(ticket-detail view state) u.got)]])
-        ::
-          [%apps %pharos %ticket @t %features ~]
-        =/  ticket-id  (slav %ud i.t.t.t.site)
-        =/  got  (~(get by tickets) ticket-id)
-        ?~  got  ~|("No ticket with id {<ticket-id>}" dump)
-        :_  state
-        (send [200 ~ [%manx (~(ticket-features view state) u.got)]])
-        ::
-          [%apps %pharos %ticket @t %edit %status ~]
-        =/  ticket-id  (slav %ud i.t.t.t.site)
-        =/  got  (~(get by tickets) ticket-id)
-        ?~  got  ~|("No ticket with id {<ticket-id>}" dump)
-        :_  state
-        (send [200 ~ [%manx (~(edit-ticket-status view state) u.got)]])
-      ==
-    ::
-    ++  pot
-      ^-  (quip card _state)
-      =/  site  site.req
-      ?~  body.request.inbound-request
-        ~|("No request body" derp)
-      ?+    site  dump
-          [%apps %pharos %settings %github-config ~]
-        =/  jon=(unit json)  (de:json:html q.u.body.request.inbound-request)
-        ?~  jon  ~|("Could not parse request body to JSON" derp)
-        =/  act=pharos-action  (dejs-github-config u.jon)
-        =/  scat=(unit (quip card _state))
-          (mole |.((handle-action act)))
-        ?~  scat  ~|("Could not apply the updated config" derp)
-        :_  +.u.scat
-        %+  weld
-          -.u.scat
-        (send [200 ~ %manx ~(success view state)])
-        ::
-          [%apps %pharos %ticket @t %edit %status @t ~]
-        =/  ticket-id  (slav %ud i.t.t.t.site)
-        =/  got  (~(get by tickets) ticket-id)
-        ?~  got
-          ~|("No ticket with id {<ticket-id>}" derp)
-        =/  status-param  `@tas`(slav %tas i.t.t.t.t.t.t.site)
-        ?.  ?=(ticket-status status-param)
-          ~|("{(trip `@t`status-param)} is not a valid ticket status" derp)
-        =/  scat=(unit (quip card _state))
-          %-  mole
-          |.
-          %-  handle-action
-          `pharos-action`[%edit-ticket-status ticket-id status-param]
-        ?~  scat 
-          ~|("Failed to update the status of ticket {<ticket-id>}" derp)
-        :_  +.u.scat
-        %+  weld
-          -.u.scat
-        %-  send
-        :*  303  ~  %redirect
-            (crip "/apps/pharos/ticket/{<ticket-id>}/features")
-        ==
       ==
     --
   --
