@@ -91,6 +91,11 @@
       token=@t
   ==
 ::
++$  export-location
+  $?  %export-csv
+      %github-issues
+  ==
+::
 ::  actions
 +$  action
   $%  $:  %create-board
@@ -126,5 +131,9 @@
           reply-to=@ud
           body=@t
           date=@da  
+      ==
+      $:  %export-tickets
+          ids=(list @ud)
+          =export-location
   ==  == 
 --
