@@ -231,7 +231,7 @@
                            repo.gh-config
                            'issues'
                        ==
-      =/  ghurl=tape  "https://{(trip (spat ghpath))}"
+      =/  ghurl=tape  "https:/{(trip (spat ghpath))}"
       =|  outcards=(list card)
       =/  i  0
       |-
