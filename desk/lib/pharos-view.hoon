@@ -264,8 +264,7 @@
               =class        "monospace"
               =type         "password"
               =required     ""
-              =pattern      "^gho_[a-zA-Z0-9]\{{(scow %ud 36)}}$"
-              =placeholder  "gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              =placeholder  "github_pat_ABCDEF..."
               =name         "token"
               =value        (trip token.github-config);
           ==
