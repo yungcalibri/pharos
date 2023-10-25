@@ -82,7 +82,18 @@
       [cards this]
     ==
   ::
-  ++  on-peek  on-peek:def
+  ++  on-peek
+    |=  =path
+    ^-  (unit (unit cage))
+    ?+    path  (on-peek:def path)
+      ::
+        [%x %ticket @ud ~]
+      =/  =ticket  (~(got by tickets) `@ud`i.t.t.path)
+      ``ticket+!>(ticket)
+      ::
+        [%x %all-tickets ~]
+      ``tickets+!>(~(val by tickets))
+    ==
   ::
   ++  on-watch
     |=  =path
@@ -93,7 +104,26 @@
     ==
   ::
   ++  on-leave  on-leave:def
-  ++  on-agent  on-agent:def
+  ::
+  ++  on-agent
+    |=  [=wire =sign:agent:gall]
+    ^-  (quip card _this)
+    ?+  -.wire  (on-agent:def wire sign)
+      %thread
+      ?+  -.sign  (on-agent:def wire sign)
+          %fact  
+        ?+     p.cage.sign  (on-agent:def wire sign)
+              %thread-fail
+              =/  err  !<  (pair term tang)  q.cage.sign
+              %-  (slog leaf+"Thread failed: {(trip p.err)}" q.err)
+              `this
+            ::
+              %thread-done
+              `this
+        ==
+      ==
+    ==
+  ::
   ++  on-arvo  on-arvo:def
   ++  on-fail  on-fail:def
   --
@@ -186,6 +216,42 @@
                         ==
       =.  comments.got  (~(put by comments.got) id.comment comment)
       [~ state(tickets (~(put by tickets) reply-to.act got))]
+      ::
+        %export-tickets
+      ?.  ?&  ?!  =('' owner.gh-config)
+              ?!  =('' repo.gh-config)
+              ?!  =('' token.gh-config)
+          ==
+          ~|("Github credentials have not been configured" !!)
+      ?>  =(%github-issues export-location.act)
+      ?>  (roll ids.act |=([id=@ud acc=?] ?&((~(has by tickets) id) acc)))
+      =/  ghpath=path  :~  'api.github.com'
+                           'repos'
+                           owner.gh-config
+                           repo.gh-config
+                           'issues'
+                       ==
+      =/  ghurl=tape  "https://{(trip (spat ghpath))}"
+      =|  outcards=(list card)
+      =/  i  0
+      |-
+      ?:  =((lent ids.act) i)
+        [outcards state]
+      =/  id  (snag i ids.act)
+      =/  tic  (~(got by tickets) id)
+      =/  twire=@ta  (crip (weld (a-co:co id) (trip (scot %da now.bowl))))
+      =/  tid=@ta  (crip (weld (a-co:co id) (trip (cat 3 'thread_' (scot %uv (sham eny.bowl))))))
+      =/  start-args  [~ `tid byk.bowl(r da+now.bowl) %ghi-thread !>([~ ghurl token.gh-config tic])]
+      =/  acard  :*  %pass  /thread/[twire]  %agent  [our.bowl %spider]
+                     %watch  /thread-result/[tid]
+                 ==
+      =/  bcard  :*  %pass  /thread/[twire]  %agent  [our.bowl %spider]
+                     %poke  %spider-start  !>(start-args)
+                 ==
+      %=  $
+        outcards  (weld outcards `(list card)`~[acard bcard])
+        i         +(i)
+      ==
     ==
   ::
   ++  handle-http

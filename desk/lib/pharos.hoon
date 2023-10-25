@@ -1,5 +1,17 @@
 /-  *pharos
+/+  *etch
 |%
+::
+++  enjs-ticket
+  |=  =ticket
+  ^-  ^json
+  (en-vase !>(ticket))
+::
+++  enjs-tickets
+  |=  tix=(list ticket)
+  ^-  ^json
+  a+(turn tix |=(a=ticket (en-vase !>(a))))
+::
 ++  dejs-status
   |=  jon=json
   =,  dejs:format
