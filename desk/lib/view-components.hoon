@@ -12,6 +12,10 @@
       =crossorigin  "anonymous"
       =integrity    "sha384-Kh+o8x578oGal2nue9zyjl2GP9iGiZ535uZ3CxB3mZf3DcIjovs4J1joi2p+uK18"
       =href         "https://unpkg.com/@fontsource/lora@5.0.8/index.css";
+    ;link
+      =rel          "stylesheet"
+      =crossorigin  "anonymous"
+      =href         "https://unpkg.com/@fontsource/vt323@5.0.8/index.css";
     ;script
       =crossorigin  "anonymous"
       =integrity    "sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls"
