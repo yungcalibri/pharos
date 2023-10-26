@@ -145,12 +145,12 @@
           =hx-get     "/apps/pharos/ticket/{<id.ticket>}/edit/comment"
           =hx-target  "closest .comments"
           =hx-swap    "outerHTML"
-          ; make a comment
+          ; add a note
         ==
       ::  if comment
       ;div.comment(comment-id (scow %ud id.u.cut))
         ;h3
-          ; {"Comment: "}
+          ; {"Note: "}
           ;+  (formatted-date.c date-updated.u.cut)
         ==
         ;p: {(trip body.u.cut)}
@@ -238,7 +238,7 @@
       ;textarea(type "text", name "body", required "", rows "4", cols "40")
         ; {(trip body.comment)}
       ==
-      ;button: done
+      ;button.pill.interact: done
     ==
   ==
 ::
@@ -259,7 +259,6 @@
           ;label
             ;div: Repository Owner
             ;input
-              =class        "monospace"
               =type         "text"
               =required     ""
               =placeholder  "pharos-team"
@@ -269,7 +268,6 @@
           ;label
             ;div: Repository
             ;input
-              =class        "monospace"
               =type         "text"
               =required     ""
               =placeholder  "pharos"
@@ -279,14 +277,13 @@
           ;label
             ;div: Access Token
             ;input
-              =class        "monospace"
               =type         "password"
               =required     ""
               =placeholder  "github_pat_ABCDEF..."
               =name         "token"
               =value        (trip token.github-config);
           ==
-          ;button: Submit
+          ;button.pill.interact: Submit
         ==
       ==
     ==
@@ -334,6 +331,9 @@
   form > * + * {
     margin-block-start: var(--s0);
   }
+  input {
+    width: 30ch;
+  }
   thead tr {
     background: var(--pc-seagreen-500);
     color: var(--pc-neut-800);
@@ -366,6 +366,7 @@
   #topnav .logotype {
     font-size: 175%;
     font-weight: bold;
+    font-family: VT323, monospace;
     border-radius: var(--s-3);
     padding-inline: var(--s2);
     padding-block: var(--s-5);
@@ -396,7 +397,11 @@
       var(--pc-yellow-800) 50%,
       transparent 70%
     );
-    animation: lighthouse 15s ease-in-out infinite;
+    animation-name: lighthouse;
+    animation-duration: 10s;
+    animation-timing-function: ease;
+    animation-delay: 2s;
+    animation-iteration-count: 3;
   }
   #topnav :any-link {
     color: var(--pc-neut-800);
@@ -432,8 +437,7 @@
     min-width: var(--s2);
     padding-inline: var(--s-3);
     padding-block: var(--s-4);
-    font-family: monospace;
-    font-size: 90%;
+    font-family: VT323, monospace;
     text-align: center;
     background-color: var(--pc-aquamarine-200);
     color: var(--pc-neut-600);
@@ -455,10 +459,9 @@
     color: var(--pc-yellow-800);
   }
   .monospace, .formatted-date {
-    font-family: monospace;
+    font-family: VT323, monospace;
   }
   .success {
-    font-size: 90%;
     border-radius: var(--s-3);
     padding-inline: var(--s-3);
     padding-block: var(--s-4);
