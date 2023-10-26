@@ -186,8 +186,9 @@
       ;span:"status "
       ;span.value: {(trip `@t`status.ticket)}
     ==
+    ;+  ?:  no-github-config
+      ;span;
     ;div.pill.interact
-      =disabled  ?:(no-github-config ~ "")
       =data-ticket-id  (scow %ud id.ticket)
       =hx-post  "/apps/pharos/ticket/{<id.ticket>}/export"
       =hx-swap  "outerHTML"
