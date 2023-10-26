@@ -8,6 +8,20 @@ Pharos is the first drop-in feedback system tailored for Urbit apps. Pharos allo
 
 The workflow for installing the Pharos agent is standard as any typical user space app in Urbit. Once installed, Pharos can be accessed in Landscape.
 
+For installation via the github repo, from dojo run:
+
+```hoon
+|new-desk %pharos
+|mount %pharos
+```
+
+Download the github repo and copy the contents of the app to your ship's %pharos desk. Commit and install:
+
+```hoon
+|commit %pharos
+|install our %pharos
+```
+
 ## Navigating the Pharos UI
 
 ### Tickets View
