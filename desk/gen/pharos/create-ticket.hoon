@@ -2,21 +2,21 @@
 :-  %say
 |=  $:  [now=@da eny=@uvJ bec=beak]
         :: [wright=@ta toward=@t ~]
-        $:  =desk
-            title=@t
+        $:  title=@t
             body=@t
-            =ticket-type
             ~
         ==
-        ~
+        $:  =ticket-type
+            ~
+        ==
     ==
 :-  %pharos-action
 :-  %create-ticket
-:*  desk
+:*  %dojo
     title
     body
-    author=~zod
-    anon=%.y
+    ~zod
+    anon=%.n
     app-version=[0 0 0]
     ticket-type
 ==
