@@ -132,7 +132,15 @@
 ++  hc
   |_  =bowl:gall
   ::
-  ++  do-nothing  ~
+  ++  new-comment
+    |=  ticket-id=@ud
+    =+  *comment
+    %=  -
+      author        our.bowl
+      date-created  now.bowl
+      date-updated  now.bowl
+      reply-to      ticket-id
+    ==
   ::
   ++  handle-action
     |=  act=action
@@ -369,16 +377,6 @@
         :*  303  ~  %redirect
             (crip "/apps/pharos/ticket/{<ticket-id>}")  ::fix this
         ==
-      ==
-      ++  new-comment 
-      |=  ticket-id=@ud
-      ^-  comment
-      :*  id=0
-          body=''
-          author=our.bowl
-          date-created=now.bowl
-          date-updated=now.bowl
-          reply-to=ticket-id
       ==
     --
   --
