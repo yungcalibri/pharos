@@ -2,6 +2,17 @@
 /+  c=view-components
 |_  [%0 * * * boards=(map desk board) tickets=(map @ud ticket) * =github-config]
 ::
+++  no-github-config
+  ^-  ?
+  ?|  =('' owner.github-config)
+      =('' repo.github-config)
+      =('' token.github-config)
+  ==
+::
+++  success
+  ^-  manx
+  ;div.success: Success!
+::
 ++  page
   |=  kid=manx
   ^-  manx
@@ -52,7 +63,7 @@
     ;+  nav
     ::
     ;center-l#home-main
-      ;sidebar-l(side "right", sideWidth "28rem", space "var(--s-4)")
+      ;sidebar-l(sideWidth "45vw", space "var(--s-4)")
         ::  main content
         ;table#ticket-list
           ;thead
@@ -175,6 +186,13 @@
       ;span:"status "
       ;span.value: {(trip `@t`status.ticket)}
     ==
+    ;div.pill.interact
+      =disabled  ?:(no-github-config ~ "")
+      =data-ticket-id  (scow %ud id.ticket)
+      =hx-post  "/apps/pharos/ticket/{<id.ticket>}/export"
+      =hx-swap  "outerHTML"
+      ;span: Export to Github Issues
+    ==
   ==
 ::
 ++  edit-ticket-status
@@ -274,12 +292,6 @@
     ==
   ==
 ::
-++  success
-  ^-  manx
-  ;div
-    ;span.success: Success!
-  ==
-::
 ++  style
   ^~
   %-  trip
@@ -369,7 +381,7 @@
     z-index: 2;
     text-shadow: 0px 1px 2px var(--pc-yellow-200);
   }
-  #topnav .logotype::before {
+  #topnav .logotype::before, .interact.htmx-indicator::before {
     content: '';
     position: absolute;
     z-index: 1;
@@ -446,11 +458,13 @@
     font-family: monospace;
   }
   .success {
-    border: 1px solid var(--pc-aquamarine-800);
+    font-size: 90%;
     border-radius: var(--s-3);
-    color: #00CC00;
-    padding-inline: 1ch;
-    padding-block: 0.5lh;
+    padding-inline: var(--s-3);
+    padding-block: var(--s-4);
+    border: 1px solid var(--pc-orange-200);
+    background: var(--pc-neut-400);
+    color: var(--pc-orange-200);
   }
   @keyframes lighthouse {
     0%  {
