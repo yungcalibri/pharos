@@ -17,7 +17,7 @@
 =/  jsondata  %-  en:json:html
               o+(malt (limo ~[['title' s+title] ['body' s+body]]))
 
-~&  %thread-json^jsondata
+::  ~&  %thread-json^jsondata
 
 =/  ticketdata  `(as-octs:mimes:html jsondata)
 =/  =request:http  [%'POST' url headers ticketdata]
@@ -29,7 +29,12 @@
 
 ?.  ?=([%iris %http-response %finished *] q.res)
   (strand-fail:strand %bad-sign ~)
-~&  %thread-response^+.q.res
+
+::  ~&  %thread-response^+.q.res
+
 ?~  full-file.client-response.q.res
   (strand-fail:strand %no-body ~)
+
+~&  "github submission succeeded: {<title>}"
+
 (pure:m !>(`@t`q.data.u.full-file.client-response.q.res))

@@ -358,7 +358,7 @@
             (crip "/apps/pharos/ticket/{<ticket-id>}/features")
         ==
         ::
-        [%apps %pharos %ticket @t %edit %comment @t ~]
+          [%apps %pharos %ticket @t %edit %comment @t ~]
         =/  ticket-id  (slav %ud i.t.t.t.site)
         ~&  body
         =/  jon=(unit json)  (de:json:html q.u.body)
@@ -377,6 +377,19 @@
         :*  303  ~  %redirect
             (crip "/apps/pharos/ticket/{<ticket-id>}")  ::fix this
         ==
+        ::
+          [%apps %pharos %ticket @t %export ~]
+        =/  ticket-id  (slav %ud i.t.t.t.site)
+        =/  scat=(unit (quip card _state))
+          %-  mole
+          |.
+          %-  handle-action
+          `action`[%export-tickets ~[ticket-id] %github-issues]
+        ?~  scat  ~|("Exporting ticket {<ticket-id>} failed" derp)
+        :_  +.u.scat
+        %+  weld
+          -.u.scat
+        (send [200 ~ %manx ~(success view state)])
       ==
     --
   --
