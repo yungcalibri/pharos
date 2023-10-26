@@ -26,7 +26,7 @@
   =,  dejs:format
   :-  %edit-github-config
   %.  jon
-  (ot ~[repo+so owner+so token+so])
+  (ot ~[owner+so repo+so token+so])
 ::
 ++  dejs-comment
   |=  jon=json
