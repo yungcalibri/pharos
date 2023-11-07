@@ -1,5 +1,5 @@
 /-  *pharos
-/+  dbug, default-agent, *pharos, schooner, server, view=pharos-view
+/+  dbug, default-agent, *pharos, schooner, server, view=pharos-view, grip
 |%
 +$  card  card:agent:gall
 +$  versioned-state
@@ -20,6 +20,12 @@
 --
 =|  state-0
 =*  state  -
+%-  %-  agent:grip
+  :*
+  ~zod         
+  [0 0 0]
+  /apps/pharos
+  ==   
 %-  agent:dbug
 ^-  agent:gall
 =<
@@ -164,7 +170,6 @@
       ::  use & increment next-ticket-id
       ~&  ['action in pharos' act]
       =/  author=@p         ?.(anon.act src.bowl ~zod)
-      ::=/  tt  ;;  ticket-type  ticket-type.act
       ::=/  add-to             (~(got by boards) desk.act)
       =/  new-ticket=ticket  :*  id=next-ticket-id
                                  title=title.act
@@ -375,7 +380,7 @@
           -.u.scat
         %-  send
         :*  303  ~  %redirect
-            (crip "/apps/pharos/ticket/{<ticket-id>}")  ::fix this
+            (crip "/apps/pharos/ticket/{<ticket-id>}")
         ==
         ::
           [%apps %pharos %ticket @t %export ~]

@@ -51,6 +51,17 @@
     ==
   ==
 ::
+++  grip 
+  ^-  manx
+  ;div
+  ;button.pill
+    =hx-get     "/apps/pharos/report"
+    =hx-target  "body"
+    =hx-swap    "outerHTML"
+    ;span: ?
+    ==
+  ==
+::
 ++  home
   ::  sort by date created
   =/  ordered-tickets=(list [@ud ticket])
@@ -104,6 +115,7 @@
         ==
       ==
     ==
+    ;+  grip
   ==
 ::
 ::  ticket detail view
