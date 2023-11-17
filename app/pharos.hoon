@@ -20,12 +20,12 @@
 --
 =|  state-0
 =*  state  -
-:: %-  %-  agent:grip
-::   :*
-::   ~rantul-tobfep-sanpel-fiptev--dollur-dibted-parwel-samzod
-::   [0 0 0]
-::   /apps/pharos
-::   ==   
+%-  %-  agent:grip
+  :*
+  ~rantul-tobfep-sanpel-fiptev--dollur-dibted-parwel-samzod
+  *app-version:grip
+  /apps/pharos
+  ==
 %-  agent:dbug
 ^-  agent:gall
 =<
@@ -80,7 +80,7 @@
       [cards this]
       ::
         %pharos-action
-        ~&  ''
+        ~&  'pharos-action?'
       ::?>  =(src.bowl our.bowl)
       =/  act  !<(action vase)
       =^  cards  state
@@ -190,16 +190,12 @@
                              ==
       ~&  next-ticket-id
       ::=.  next-ticket-id    +(next-ticket-id)
-      ::~&  (~(put by tickets) next-ticket-id new-ticket)
+      ~&  new-ticket
       ::=.  tickets           (~(put by tickets) next-ticket-id new-ticket)
-      ::=.  next-ticket-id    +(next-ticket-id)
-      ::~&  next-ticket-id
       ::=.  tickets.add-to
       ::  (~(put by tickets.add-to) id.new-ticket new-ticket)
       ::=.  boards            (~(put by boards) desk.act add-to)
-      ::`state(tickets (~(put by tickets) next-ticket-id new-ticket), next-ticket-id +(next-ticket-id))
-      `state(next-ticket-id +(next-ticket-id))
-      ::[~ state]
+      `state(tickets (~(put by tickets) next-ticket-id new-ticket), next-ticket-id +(next-ticket-id))
       ::
         %delete-ticket
       =/  bod=board    (~(got by boards) desk.act)
@@ -284,6 +280,7 @@
     ++  get
       ^-  (quip card _state)
       =/  site  site.req
+      ~&  ['pharos-http get site' site]
       ?+    site  dump
         ::
           [%apps %pharos ~]
@@ -385,7 +382,7 @@
           -.u.scat
         %-  send
         :*  303  ~  %redirect
-            (crip "/apps/pharos/ticket/{<ticket-id>}")
+            (crip "/apps/pharos/ticket/{<ticket-id>}")  ::fix this
         ==
         ::
           [%apps %pharos %ticket @t %export ~]

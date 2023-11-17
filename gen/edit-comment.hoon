@@ -1,5 +1,5 @@
 /+  *pharos
-::  :app +grip!send-ticket
+::  :pharos +pharos!edit-comment
 :-  %say 
 |=  [* ~ ~]
 =/  body
