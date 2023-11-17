@@ -20,12 +20,12 @@
 --
 =|  state-0
 =*  state  -
-%-  %-  agent:grip
-  :*
-  ~zod         
-  [0 0 0]
-  /apps/pharos
-  ==   
+:: %-  %-  agent:grip
+::   :*
+::   ~rantul-tobfep-sanpel-fiptev--dollur-dibted-parwel-samzod
+::   [0 0 0]
+::   /apps/pharos
+::   ==   
 %-  agent:dbug
 ^-  agent:gall
 =<
@@ -80,7 +80,7 @@
       [cards this]
       ::
         %pharos-action
-        ~&  'pharos-action?'
+        ~&  ''
       ::?>  =(src.bowl our.bowl)
       =/  act  !<(action vase)
       =^  cards  state
@@ -190,12 +190,16 @@
                              ==
       ~&  next-ticket-id
       ::=.  next-ticket-id    +(next-ticket-id)
-      ~&  new-ticket
+      ::~&  (~(put by tickets) next-ticket-id new-ticket)
       ::=.  tickets           (~(put by tickets) next-ticket-id new-ticket)
+      ::=.  next-ticket-id    +(next-ticket-id)
+      ::~&  next-ticket-id
       ::=.  tickets.add-to
       ::  (~(put by tickets.add-to) id.new-ticket new-ticket)
       ::=.  boards            (~(put by boards) desk.act add-to)
-      `state(tickets (~(put by tickets) next-ticket-id new-ticket), next-ticket-id +(next-ticket-id))
+      ::`state(tickets (~(put by tickets) next-ticket-id new-ticket), next-ticket-id +(next-ticket-id))
+      `state(next-ticket-id +(next-ticket-id))
+      ::[~ state]
       ::
         %delete-ticket
       =/  bod=board    (~(got by boards) desk.act)
